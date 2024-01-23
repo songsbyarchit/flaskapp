@@ -24,7 +24,7 @@
     <h1>Login</h1>
 
     <form method="POST" action="{{ url_for('login') }}">
-        <label for="username">Username (Email Address):</label>
+        <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br><br>
 
         <label for="password">Password:</label>
@@ -37,10 +37,10 @@
             {% endfor %}
         </div>
         {% endif %}
-
+        <p>Don't have an account? <a href="/register">Register here</a>.</p>
         <button type="submit">Login</button>
     </form>
-    <p>Don't have an account? <a href="/register">Register here</a>.</p>
+
 
     <!-- Link Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, redirect, url_for 
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy.exc import IntegrityError
@@ -16,7 +16,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)  # Change this line
+    password_hash = db.Column(db.String(128), nullable=False)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -28,7 +28,7 @@ class User(db.Model):
 app.app_context().push()
 
 # Create the database and tables
-#db.create_all()
+# db.create_all()
 
 def is_strong_password(password):
     # Add your criteria for a strong password here
@@ -41,9 +41,14 @@ def is_strong_password(password):
         any(char in '!@#$%^&*()-_=+[]{}|;:\'",.<>?/~`' for char in password)
     )
 
+@app.route("/registration_confirmation")
+def registration_confirmation():
+    # Your code here
+    return render_template("registration_confirmation.html")
+
 @app.route("/login_confirmation")
 def login_confirmation():
-    return render_template("login_confirmation.html", username="JohnDoe")  # Replace "JohnDoe" with the actual username
+    return render_template("login_confirmation.html")
 
 @app.route("/")
 def home():
@@ -53,6 +58,7 @@ def home():
 def register():
     if request.method == 'POST':
         registration_successful = False
+        username_exists = False
         email_exists = False
         password_valid = True
         password_match = True
@@ -63,11 +69,19 @@ def register():
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
 
-        # Check if the email already exists in the database
-        existing_user = User.query.filter_by(email=email).first()
+        # Check if the username already exists in the database
+        existing_username = User.query.filter_by(username=username).first()
 
-        if existing_user:
+        if existing_username:
+            username_exists = True
+            flash("This username already exists. Please choose a different username.", 'error')
+
+        # Check if the email already exists in the database
+        existing_email = User.query.filter_by(email=email).first()
+
+        if existing_email:
             email_exists = True
+            flash("There is already an account associated with this email.", 'error')
 
         # Validate password
         if not is_strong_password(password):
@@ -79,8 +93,9 @@ def register():
             password_match = False
             flash("Password and Confirm Password do not match.", 'error')
 
-        # Continue with registration if email is not duplicate, password is valid, and passwords match
-        if not email_exists and password_valid and password_match:
+        # Continue with registration if username and email are not duplicates,
+        # password is valid, and passwords match
+        if not username_exists and not email_exists and password_valid and password_match:
             new_user = User(username=username, email=email)
             new_user.set_password(password)  # Set the password using the hash
 
@@ -88,19 +103,48 @@ def register():
                 db.session.add(new_user)
                 db.session.commit()
                 registration_successful = True
+                flash("Registration successful. You can now login.", 'success')
+                return redirect(url_for('registration_confirmation'))
+            
             except IntegrityError as e:
                 # Handle other IntegrityError scenarios, if any
                 db.session.rollback()
 
-        return render_template("register.html", registration_successful=registration_successful, email_exists=email_exists, password_valid=password_valid, password_match=password_match)
+        # Render the registration form with error messages
+        return render_template("register.html", registration_successful=registration_successful,
+                               username_exists=username_exists, email_exists=email_exists,
+                               password_valid=password_valid, password_match=password_match)
 
     # If it's a GET request, render the registration form
     return render_template("register.html")
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        login_successful = False
+
+        # Get form data
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        # Check if the username exists in the database
+        user = User.query.filter_by(username=username).first()
+
+        if user and user.check_password(password):
+            # Authentication successful
+            login_successful = True
+        else:
+            # Authentication failed
+            flash("Invalid username or password. Please try again.", 'error')
+
+        # Handle the outcome (e.g., redirect to a different page on successful login)
+        if login_successful:
+            # Redirect to a logged-in area or display a confirmation message
+            return redirect(url_for('login_confirmation'))
+
+    # If it's a GET request or login is unsuccessful, render the login form
     return render_template("login.html")
 
 # Run the app locally on localhost
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)  # Set debug to True for development purposes
+    app.run(debug=True, port=5001)  # Set debug to True for development purposes
