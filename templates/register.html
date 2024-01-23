@@ -34,15 +34,13 @@
 
         {% if not password_valid %}
         <div class="error-messages">
-            {% for message in get_flashed_messages(category_filter='error') %}
-            {{ message }}
-            {% endfor %}
+            Password must be at least 8 characters long and include uppercase, lowercase, digit, and special character.
         </div>
         {% endif %}
 
         {% if not password_match %}
         <div class="error-messages">
-            Passwords do not match. Please enter matching passwords.
+            Password and Confirm Password do not match. Please enter matching passwords.
         </div>
         {% endif %}
 
