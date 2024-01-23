@@ -1,3 +1,5 @@
+<!-- login_confirmation.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,6 +20,13 @@
 
     <h1>Login Successful</h1>
     <p>Welcome back, {{ username }}!</p>
+
+    {% include 'logout_button.html' %}
+
+    <!-- Additional content for troubleshooting -->
+    <hr>
+    <p>If you see this text, the logout button inclusion is working.</p>
+
 </body>
 
 </html>

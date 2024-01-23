@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, url_for 
+from flask import Flask, render_template, request, flash, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy.exc import IntegrityError
@@ -23,6 +23,11 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    @property
+    def current_user(self):
+        # Check if the user is in the session or has other indicators of being logged in
+        return 'user_id' in session  # Assuming you store user_id in the session upon login
 
 # Create the application context
 app.app_context().push()
@@ -104,7 +109,7 @@ def register():
                 db.session.commit()
                 registration_successful = True
                 flash("Registration successful. You can now login.", 'success')
-                return redirect(url_for('registration_confirmation'))
+                return redirect(url_for('registration_confirmation', username=username))
             
             except IntegrityError as e:
                 # Handle other IntegrityError scenarios, if any
@@ -117,6 +122,16 @@ def register():
 
     # If it's a GET request, render the registration form
     return render_template("register.html")
+
+@app.route("/logout", methods=['POST'])
+def logout():
+    session.pop('user_id', None)
+    flash("You have been logged out.", 'success')
+    return redirect(url_for('logout_page'))
+
+@app.route("/logout_page")
+def logout_page():
+    return render_template("logout.html")
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -133,6 +148,8 @@ def login():
         if user and user.check_password(password):
             # Authentication successful
             login_successful = True
+            session['user_id'] = user.id  # Store user information in the session
+
         else:
             # Authentication failed
             flash("Invalid username or password. Please try again.", 'error')
@@ -140,7 +157,7 @@ def login():
         # Handle the outcome (e.g., redirect to a different page on successful login)
         if login_successful:
             # Redirect to a logged-in area or display a confirmation message
-            return redirect(url_for('login_confirmation'))
+            return redirect(url_for('login_confirmation', username=username))
 
     # If it's a GET request or login is unsuccessful, render the login form
     return render_template("login.html")
