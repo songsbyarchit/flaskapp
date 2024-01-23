@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy.exc import IntegrityError
-from flask import redirect, url_for
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
@@ -16,13 +16,19 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(128), nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)  # Change this line
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 # Create the application context
 app.app_context().push()
 
 # Create the database and tables
-db.create_all()
+#db.create_all()
 
 def is_strong_password(password):
     # Add your criteria for a strong password here
@@ -75,7 +81,8 @@ def register():
 
         # Continue with registration if email is not duplicate, password is valid, and passwords match
         if not email_exists and password_valid and password_match:
-            new_user = User(username=username, email=email, password=password)
+            new_user = User(username=username, email=email)
+            new_user.set_password(password)  # Set the password using the hash
 
             try:
                 db.session.add(new_user)

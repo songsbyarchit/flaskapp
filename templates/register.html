@@ -34,18 +34,19 @@
 
         {% if not password_valid %}
         <div class="error-messages">
-            Password must be at least 8 characters long and include uppercase, lowercase, digit, and special character.
+            {% for message in get_flashed_messages(category_filter='error') %}
+            {{ message }}
+            {% endfor %}
         </div>
         {% endif %}
 
         {% if not password_match %}
         <div class="error-messages">
-            Password and Confirm Password do not match. Please enter matching passwords.
+            Passwords do not match. Please enter matching passwords.
         </div>
         {% endif %}
 
         <button type="submit">Register</button>
-        <input type="hidden" name="next" value="{{ url_for('login_confirmation') }}">
 
     </form>
     {% endif %}
