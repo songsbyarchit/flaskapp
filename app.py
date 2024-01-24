@@ -162,6 +162,22 @@ def login():
     # If it's a GET request or login is unsuccessful, render the login form
     return render_template("login.html")
 
+@app.route("/dashboard/create_ticket")
+def create_ticket():
+    return render_template("dashboard/create_ticket.html")
+
+@app.route("/dashboard/view_tickets")
+def view_tickets():
+    return render_template("dashboard/view_tickets.html")
+
+@app.route("/dashboard/overview")
+def overview():
+    return render_template("dashboard/overview.html")
+
+@app.route("/dashboard/faq")
+def faq():
+    return render_template("dashboard/faq.html")
+
 # Run the app locally on localhost
 if __name__ == "__main__":
     app.run(debug=True, port=5001)  # Set debug to True for development purposes

@@ -7,7 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Confirmation</title>
-    <!-- Add your custom styles or link a CSS file if needed -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,14 +17,9 @@
 </head>
 
 <body>
-    {% include 'logout_button.html' %}
-
+    {% include 'menu2.html' %}
     <h1>Login Successful</h1>
     <p>Welcome back, {{ username }}!</p>
-
-    <!-- Additional content for troubleshooting -->
-    <hr>
-    <p>If you see this text, the logout button inclusion is working.</p>
 
 </body>
 
