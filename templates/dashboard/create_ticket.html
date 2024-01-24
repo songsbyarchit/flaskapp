@@ -15,10 +15,188 @@
 
     <h1>Create Ticket</h1>
 
+    <br><label for="fullName">Full Name</label>
+    <input type="text" id="fullName" name="fullName" required>
+    <br>(NOTE: if you are writing about an issue someone<br>else is experiencing, please
+    enter THEIR name.)<br>
+    <br>
+
+    <label for="department">Department:</label>
+    <select id="department" name="department" required>
+        <option value="engineering">Engineering</option>
+        <option value="marketing">Marketing</option>
+        <option value="sales">Sales</option>
+        <option value="cx">CX</option>
+        <option value="tech-sales">Tech Sales</option>
+        <option value="other">Other</option>
+    </select>
+    <br><br>
+
+    <form method="POST" action="{{ url_for('create_ticket') }}">
+        <label for="theater">Theater:</label>
+        <select id="theater" name="theater" onchange="updateCountries()" required>
+            <option value="emea">EMEA</option>
+            <option value="apjc">APJC</option>
+            <option value="na">NA</option>
+        </select>
+        <br><br>
+
+        <label for="country">Country:</label>
+        <select id="country" name="country" disabled required>
+            <!-- Options will be dynamically populated based on the selected theater -->
+        </select>
+        <br><br>
+
+        <div id="phoneNumberSection">
+            <label for="phoneNumber">Phone Number</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" required>
+        </div>
+        <br>
+
+        <div id="emailSection">
+            <label for="email">Email address:</label>
+            <input type="text" id="email" name="email" required>
+        </div>
+        <br>
+
+        <label for="bestMethod">I prefer to be reached by:</label>
+        <select id="bestMethod" name="bestMethod">
+            <option value="phoneCall">Phone Call</option>
+            <option value="textMessage">Text Message</option>
+            <option value="email">Email</option>
+        </select>
+        <br><br>
+
+        <label for="severity">Severity of Issue:</label>
+        <select id="severity" name="severity" required>
+            <option value="1">Slightly Impacting Role</option>
+            <option value="2">Somewhat Impacting Role</option>
+            <option value="3">Significantly Impacting Role</option>
+            <option value="4">Business Critical Issue</option>
+            <option value="5">Mission Critical Issue</option>
+        </select>
+        <br><br>
+
+        <label for="description">Brief Description of Issue:</label>
+        <br>
+        <textarea id="description" name="description" rows="4" required></textarea>
+        <br><br>
+
+        <button type="submit">Create Ticket</button>
+    </form>
+
     <!-- Optional: Add Bootstrap JS and jQuery for menu functionality -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        function updateCountries() {
+            // Get the selected theater value
+            var theater = document.getElementById("theater").value;
+
+            // Get the country dropdown
+            var countryDropdown = document.getElementById("country");
+
+            // Enable the country dropdown
+            countryDropdown.disabled = false;
+
+            // Clear existing options
+            countryDropdown.innerHTML = "";
+
+            // Populate options based on the selected theater
+            if (theater === "emea") {
+                addOption(countryDropdown, "unitedKingdom", "United Kingdom");
+                addOption(countryDropdown, "germany", "Germany");
+                addOption(countryDropdown, "france", "France");
+                addOption(countryDropdown, "italy", "Italy");
+                addOption(countryDropdown, "spain", "Spain");
+                addOption(countryDropdown, "netherlands", "Netherlands");
+                addOption(countryDropdown, "belgium", "Belgium");
+                addOption(countryDropdown, "switzerland", "Switzerland");
+                addOption(countryDropdown, "sweden", "Sweden");
+                addOption(countryDropdown, "norway", "Norway");
+                addOption(countryDropdown, "denmark", "Denmark");
+                addOption(countryDropdown, "finland", "Finland");
+                addOption(countryDropdown, "austria", "Austria");
+                addOption(countryDropdown, "portugal", "Portugal");
+                addOption(countryDropdown, "greece", "Greece");
+                addOption(countryDropdown, "ireland", "Ireland");
+                addOption(countryDropdown, "unitedArabEmirates", "United Arab Emirates");
+                addOption(countryDropdown, "saudiArabia", "Saudi Arabia");
+                addOption(countryDropdown, "qatar", "Qatar");
+                addOption(countryDropdown, "oman", "Oman");
+                addOption(countryDropdown, "bahrain", "Bahrain");
+                addOption(countryDropdown, "kuwait", "Kuwait");
+                addOption(countryDropdown, "jordan", "Jordan");
+                addOption(countryDropdown, "lebanon", "Lebanon");
+                addOption(countryDropdown, "israel", "Israel");
+                addOption(countryDropdown, "southAfrica", "South Africa");
+                addOption(countryDropdown, "nigeria", "Nigeria");
+                addOption(countryDropdown, "kenya", "Kenya");
+                addOption(countryDropdown, "egypt", "Egypt");
+                addOption(countryDropdown, "morocco", "Morocco");
+                addOption(countryDropdown, "algeria", "Algeria");
+                addOption(countryDropdown, "tunisia", "Tunisia");
+                addOption(countryDropdown, "ghana", "Ghana");
+                addOption(countryDropdown, "ivoryCoast", "Ivory Coast");
+                addOption(countryDropdown, "otherEmea", "Other");
+                // Add more options as needed for EMEA
+            } else if (theater === "apjc") {
+                addOption(countryDropdown, "china", "China");
+                addOption(countryDropdown, "india", "India");
+                addOption(countryDropdown, "japan", "Japan");
+                addOption(countryDropdown, "southKorea", "South Korea");
+                addOption(countryDropdown, "australia", "Australia");
+                addOption(countryDropdown, "singapore", "Singapore");
+                addOption(countryDropdown, "malaysia", "Malaysia");
+                addOption(countryDropdown, "thailand", "Thailand");
+                addOption(countryDropdown, "indonesia", "Indonesia");
+                addOption(countryDropdown, "vietnam", "Vietnam");
+                addOption(countryDropdown, "philippines", "Philippines");
+                addOption(countryDropdown, "newZealand", "New Zealand");
+                addOption(countryDropdown, "taiwan", "Taiwan");
+                addOption(countryDropdown, "hongKong", "Hong Kong");
+                addOption(countryDropdown, "bangladesh", "Bangladesh");
+                addOption(countryDropdown, "pakistan", "Pakistan");
+                addOption(countryDropdown, "sriLanka", "Sri Lanka");
+                addOption(countryDropdown, "myanmar", "Myanmar");
+                addOption(countryDropdown, "cambodia", "Cambodia");
+                addOption(countryDropdown, "laos", "Laos");
+                addOption(countryDropdown, "maldives", "Maldives");
+                addOption(countryDropdown, "nepal", "Nepal");
+                addOption(countryDropdown, "bhutan", "Bhutan");
+                addOption(countryDropdown, "fiji", "Fiji");
+                addOption(countryDropdown, "papuaNewGuinea", "Papua New Guinea");
+                addOption(countryDropdown, "solomonIslands", "Solomon Islands");
+                addOption(countryDropdown, "vanuatu", "Vanuatu");
+                addOption(countryDropdown, "samoa", "Samoa");
+                addOption(countryDropdown, "tonga", "Tonga");
+                addOption(countryDropdown, "tuvalu", "Tuvalu");
+                addOption(countryDropdown, "kiribati", "Kiribati");
+                addOption(countryDropdown, "micronesia", "Micronesia");
+                addOption(countryDropdown, "marshallIslands", "Marshall Islands");
+                addOption(countryDropdown, "palau", "Palau");
+                addOption(countryDropdown, "otherApjc", "Other");
+                // Add more options as needed for APJC
+            } else if (theater === "na") {
+                addOption(countryDropdown, "unitedStates", "United States");
+                addOption(countryDropdown, "canada", "Canada");
+                addOption(countryDropdown, "mexico", "Mexico");
+                addOption(countryDropdown, "bermuda", "Bermuda");
+                addOption(countryDropdown, "greenland", "Greenland");
+                addOption(countryDropdown, "saintPierreMiquelon", "Saint Pierre and Miquelon");
+                // Add more options as needed for NA
+            }
+        }
+
+        function addOption(selectElement, value, text) {
+            var option = document.createElement("option");
+            option.value = value;
+            option.text = text;
+            selectElement.add(option);
+        }
+    </script>
 </body>
 
 </html>
