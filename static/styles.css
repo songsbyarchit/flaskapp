@@ -30,3 +30,12 @@ nav a:hover {
     margin-left: 7px;
     /* Adjust this value as needed */
 }
+
+/* Optional: Add custom styles for FAQs */
+.faq-item {
+    margin-bottom: 20px;
+}
+
+.faq-item p {
+    margin-top: 10px;
+}
