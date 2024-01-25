@@ -18,9 +18,13 @@
 
 <body>
     {% include 'menu2.html' %}
-    <h1>Login Successful</h1>
-    <p>Welcome back, {{ username }}!</p>
 
+    {% if current_user.is_authenticated %}
+    <h1>Login Successful</h1>
+    <p>Welcome back, {{ current_user.username }}!</p>
+    {% else %}
+    <p>You are not logged in.</p>
+    {% endif %}
 </body>
 
 </html>

@@ -1,10 +1,13 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
+from flask_login import current_user, login_required, LoginManager, UserMixin, login_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 app = Flask(__name__)
+login_manager = LoginManager(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SECRET_KEY'] = 'your_secret_key'
 db = SQLAlchemy(app)
@@ -17,6 +20,7 @@ class User(db.Model):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    tickets = db.relationship('Ticket', backref='user', lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -25,12 +29,54 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
     @property
-    def current_user(self):
-        # Check if the user is in the session or has other indicators of being logged in
-        return 'user_id' in session  # Assuming you store user_id in the session upon login
+    def is_authenticated(self):
+        # This property is required by Flask-Login to determine if the user is authenticated
+        return True
+
+    @property
+    def is_active(self):
+        # This property is required by Flask-Login to determine if the user is active
+        return True
+
+    @property
+    def is_anonymous(self):
+        # This property is required by Flask-Login to determine if the user is anonymous
+        return False
+
+    def get_id(self):
+        # This method is required by Flask-Login to get the unique identifier for the user
+        return str(self.id)
+
+class Ticket(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(50), nullable=False)  # Add this line
+    username = db.Column(db.String(50), nullable=False)
+    department = db.Column(db.String(50), nullable=False)
+    theater = db.Column(db.String(50), nullable=False)
+    country = db.Column(db.String(50), nullable=False)
+    phone_number = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    best_method = db.Column(db.String(20), nullable=False)
+    severity = db.Column(db.Integer, nullable=False)
+    technology = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f"Ticket('{self.full_name}', '{self.technology}', '{self.created_at}')"
 
 # Create the application context
 app.app_context().push()
+
+@login_manager.user_loader
+def load_user(user_id):
+    print(f"load_user called with user_id: {user_id}")
+    if user_id:
+        user = User.query.get(int(user_id))
+        print(f"Returning user: {user}")
+        return user
+    return None
 
 # Create the database and tables
 # db.create_all()
@@ -46,14 +92,36 @@ def is_strong_password(password):
         any(char in '!@#$%^&*()-_=+[]{}|;:\'",.<>?/~`' for char in password)
     )
 
+@app.before_request
+def before_request():
+    print("Before request")
+    print(f"load_user called with user_id: {current_user.get_id()}")
+    print(f"Session data: {session}")
+
+@app.route('/debug_session')
+def debug_session():
+    return str(session)
+
+@app.route('/debug_session_contents')
+def debug_session_contents():
+    return str(session.items())
+
+@app.route("/login_confirmation")
+@login_required
+def login_confirmation():
+    print(f"current_user: {current_user}")
+    print(f"current_user.is_authenticated: {current_user.is_authenticated}")
+
+    if current_user.is_authenticated:
+        return render_template("login_confirmation.html", username=current_user.username)
+    else:
+        flash("You are not logged in.", 'error')
+        return redirect(url_for('login'))
+
 @app.route("/registration_confirmation")
 def registration_confirmation():
     # Your code here
     return render_template("registration_confirmation.html")
-
-@app.route("/login_confirmation")
-def login_confirmation():
-    return render_template("login_confirmation.html")
 
 @app.route("/")
 def home():
@@ -136,8 +204,6 @@ def logout_page():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        login_successful = False
-
         # Get form data
         username = request.form.get('username')
         password = request.form.get('password')
@@ -147,28 +213,67 @@ def login():
 
         if user and user.check_password(password):
             # Authentication successful
-            login_successful = True
             session['user_id'] = user.id  # Store user information in the session
-
-        else:
-            # Authentication failed
-            flash("Invalid username or password. Please try again.", 'error')
-
-        # Handle the outcome (e.g., redirect to a different page on successful login)
-        if login_successful:
-            # Redirect to a logged-in area or display a confirmation message
+            login_user(user)  # Explicitly log in the user
+            flash("Login successful!", 'success')
+            print(f"Username: {username}")
+            print(f"User: {user}")
+            print(f"Setting session['user_id']: {user.id}")
             return redirect(url_for('login_confirmation', username=username))
+
+        # Authentication failed
+        flash("Invalid credentials. Please try again.", 'error')
 
     # If it's a GET request or login is unsuccessful, render the login form
     return render_template("login.html")
 
-@app.route("/dashboard/create_ticket")
+@app.route('/dashboard/create_ticket', methods=['GET', 'POST'])
+@login_required
 def create_ticket():
-    return render_template("dashboard/create_ticket.html")
+    if request.method == 'POST':
+        # Get form data
+        full_name = request.form['fullName']
+        department = request.form['department']
+        theater = request.form['theater']
+        country = request.form['country']
+        phone_number = request.form['phoneNumber']
+        email = request.form['email']
+        best_method = request.form['bestMethod']
+        severity = request.form['severity']
+        technology = request.form['technology']
+        description = request.form['description']
+
+        # Assuming your Ticket model has a 'username' column
+        new_ticket = Ticket(
+            username=current_user.username,
+            full_name=full_name,
+            department=department,
+            theater=theater,
+            country=country,
+            phone_number=phone_number,
+            email=email,
+            best_method=best_method,
+            severity=severity,
+            technology=technology,
+            description=description,
+        )
+
+        # Add and commit the new ticket to the database
+        db.session.add(new_ticket)
+        db.session.commit()
+
+        flash('Ticket created successfully!', 'success')
+        return redirect(url_for('dashboard'))
+
+    return render_template('dashboard/create_ticket.html')
 
 @app.route("/dashboard/view_tickets")
+@login_required
 def view_tickets():
-    return render_template("dashboard/view_tickets.html")
+    # Retrieve the user's tickets, ordered by creation date (most recent first)
+    user_tickets = Ticket.query.filter_by(user=current_user).order_by(Ticket.created_at.desc()).all()
+
+    return render_template('dashboard/view_tickets.html', user_tickets=user_tickets)
 
 @app.route("/dashboard/overview")
 def overview():
@@ -177,6 +282,10 @@ def overview():
 @app.route("/dashboard/faq")
 def faq():
     return render_template("dashboard/faq.html")
+
+@app.route("/dashboard")
+def dashboard():
+    return redirect(url_for('overview'))
 
 # Run the app locally on localhost
 if __name__ == "__main__":

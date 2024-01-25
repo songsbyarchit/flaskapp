@@ -1,4 +1,4 @@
-<!-- templates/create_ticket.html -->
+<!-- templates/view_tickets.html -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,13 +7,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Tickets</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/styles.css">
 </head>
 
 <body>
     {% include 'menu2.html' %}
 
     <h1>View Tickets</h1>
+
+    {% if user_tickets %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ticket ID</th>
+                <th>Department</th>
+                <th>Theater</th>
+                <th>Country</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Best Method</th>
+                <th>Severity</th>
+                <th>Technology</th>
+                <th>Description</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in user_tickets %}
+            <tr>
+                <td>{{ ticket.id }}</td>
+                <td>{{ ticket.department }}</td>
+                <td>{{ ticket.theater }}</td>
+                <td>{{ ticket.country }}</td>
+                <td>{{ ticket.phone_number }}</td>
+                <td>{{ ticket.email }}</td>
+                <td>{{ ticket.best_method }}</td>
+                <td>{{ ticket.severity }}</td>
+                <td>{{ ticket.technology }}</td>
+                <td>{{ ticket.description }}</td>
+                <td>{{ ticket.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>You have no tickets created. <a href="{{ url_for('create_ticket') }}">Create one here</a>.</p>
+    {% endif %}
 
     <!-- Optional: Add Bootstrap JS and jQuery for menu functionality -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
