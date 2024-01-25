@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+import logging
 
 app = Flask(__name__)
 login_manager = LoginManager(app)
@@ -12,15 +13,48 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SECRET_KEY'] = 'your_secret_key'
 db = SQLAlchemy(app)
 
+logging.basicConfig(level=logging.DEBUG)
+
 # Add Flask-Migrate configuration
 migrate = Migrate(app, db)
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     tickets = db.relationship('Ticket', backref='user', lazy=True)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def get_id(self):
+        return str(self.id)
+
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}')"
+
+class Ticket(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(50), nullable=False)  # Add this line
+    username = db.Column(db.String(50), nullable=False)
+    department = db.Column(db.String(50), nullable=False)
+    theater = db.Column(db.String(50), nullable=False)
+    country = db.Column(db.String(50), nullable=False)
+    phone_number = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    best_method = db.Column(db.String(20), nullable=False)
+    severity = db.Column(db.Integer, nullable=False)
+    technology = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f"Ticket('{self.username}', '{self.technology}', '{self.created_at}')"
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -46,25 +80,6 @@ class User(db.Model):
     def get_id(self):
         # This method is required by Flask-Login to get the unique identifier for the user
         return str(self.id)
-
-class Ticket(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    full_name = db.Column(db.String(50), nullable=False)  # Add this line
-    username = db.Column(db.String(50), nullable=False)
-    department = db.Column(db.String(50), nullable=False)
-    theater = db.Column(db.String(50), nullable=False)
-    country = db.Column(db.String(50), nullable=False)
-    phone_number = db.Column(db.String(20), nullable=False)
-    email = db.Column(db.String(120), nullable=False)
-    best_method = db.Column(db.String(20), nullable=False)
-    severity = db.Column(db.Integer, nullable=False)
-    technology = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-    def __repr__(self):
-        return f"Ticket('{self.full_name}', '{self.technology}', '{self.created_at}')"
 
 # Create the application context
 app.app_context().push()
@@ -243,10 +258,10 @@ def create_ticket():
         technology = request.form['technology']
         description = request.form['description']
 
-        # Assuming your Ticket model has a 'username' column
+        # Create a new ticket with the current user's ID
         new_ticket = Ticket(
-            username=current_user.username,
             full_name=full_name,
+            username=current_user.username,  # Assuming your Ticket model has a 'username' column
             department=department,
             theater=theater,
             country=country,
@@ -256,6 +271,7 @@ def create_ticket():
             severity=severity,
             technology=technology,
             description=description,
+            user_id=current_user.id  # Set the user_id field
         )
 
         # Add and commit the new ticket to the database
@@ -289,4 +305,4 @@ def dashboard():
 
 # Run the app locally on localhost
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)  # Set debug to True for development purposes
+    app.run(debug=True, port=5000)  # Set debug to True for development purposes

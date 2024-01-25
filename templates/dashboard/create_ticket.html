@@ -43,10 +43,8 @@
         </select>
         <br><br>
 
-        <label for="country">Country:</label>
         <select id="country" name="country" disabled required>
             <option value="" disabled selected>Please select a theater (above) before selecting a country</option>
-            <!-- Options will be dynamically populated based on the selected theater -->
         </select>
         <br><br>
 
@@ -228,35 +226,22 @@
             var form = document.querySelector('form');
 
             form.addEventListener('submit', function (event) {
-                // Get the phone number value
+                // Validation for phone number
                 var phoneNumberInput = document.getElementById('phoneNumber');
                 var phoneNumber = phoneNumberInput.value;
-
-                // Define a regular expression for a phone number pattern (10 or 11 digits)
                 var phoneNumberPattern = /^\d{10,11}$/;
 
-                // Check if the phone number matches the pattern
                 if (!phoneNumberPattern.test(phoneNumber)) {
                     alert('Please enter a valid phone number.');
                     event.preventDefault(); // Prevent form submission
+                    return;
                 }
-            });
-        });
-    </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var form = document.querySelector('form');
-
-            form.addEventListener('submit', function (event) {
-                // Get the email value
+                // Validation for email
                 var emailInput = document.getElementById('email');
                 var email = emailInput.value;
-
-                // Define a regular expression for email validation
                 var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-                // Check if the email matches the pattern
                 if (!emailPattern.test(email)) {
                     alert('Please enter a valid email address.');
                     event.preventDefault(); // Prevent form submission
