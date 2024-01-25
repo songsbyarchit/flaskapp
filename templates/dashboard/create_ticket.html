@@ -35,6 +35,7 @@
     <form method="POST" action="{{ url_for('create_ticket') }}">
         <label for="theater">Theater:</label>
         <select id="theater" name="theater" onchange="updateCountries()" required>
+            <option value="" disabled selected>- - - - -</option>
             <option value="emea">EMEA</option>
             <option value="apjc">APJC</option>
             <option value="na">NA</option>
@@ -43,18 +44,19 @@
 
         <label for="country">Country:</label>
         <select id="country" name="country" disabled required>
+            <option value="" disabled selected>Please select a theater (above) before selecting a country</option>
             <!-- Options will be dynamically populated based on the selected theater -->
         </select>
         <br><br>
 
         <div id="phoneNumberSection">
-            <label for="phoneNumber">Phone Number</label>
+            <label for="phoneNumber">The best phone number to reach me is:</label>
             <input type="text" id="phoneNumber" name="phoneNumber" required>
         </div>
         <br>
 
         <div id="emailSection">
-            <label for="email">Email address:</label>
+            <label for="email">The best email address to reach me is:</label>
             <input type="text" id="email" name="email" required>
         </div>
         <br>
@@ -69,15 +71,37 @@
 
         <label for="severity">Severity of Issue:</label>
         <select id="severity" name="severity" required>
-            <option value="1">Slightly Impacting Role</option>
-            <option value="2">Somewhat Impacting Role</option>
-            <option value="3">Significantly Impacting Role</option>
-            <option value="4">Business Critical Issue</option>
-            <option value="5">Mission Critical Issue</option>
+            <option value="1">1 - Slightly Impacting Role</option>
+            <option value="2">2 - Somewhat Impacting Role</option>
+            <option value="3">3 - Significantly Impacting Role</option>
+            <option value="4">4 - Business Critical Issue</option>
+            <option value="5">5 - Mission Critical Issue</option>
         </select>
         <br><br>
 
-        <label for="description">Brief Description of Issue:</label>
+        <label for="technology">I am experiencing issues with:</label>
+        <select id="technology" name="technology" required>
+            <option value="aha">Aha!</option>
+            <option value="ciscoCommerceWorkspace">Cisco Commerce Workspace (CCW)</option>
+            <option value="ciscoUnifiedCommunicationsManager">Cisco Unified Communications Manager (CUCM)</option>
+            <option value="concur">Concur</option>
+            <option value="confluence">Confluence</option>
+            <option value="googleAccountError">Google Account Error</option>
+            <option value="macHardwareIssue">Mac Hardware Issue</option>
+            <option value="okta">Okta</option>
+            <option value="outlook">Outlook</option>
+            <option value="salesforce">Salesforce</option>
+            <option value="sharepoint">Sharepoint</option>
+            <option value="teamspace">Teamspace</option>
+            <option value="webex">Webex</option>
+            <option value="windowsHardwareIssue">Windows Hardware Issue</option>
+            <option value="workday">Workday</option>
+            <option value="other">Other</option>
+        </select>
+        <br><br>
+
+
+        <label for="description">The issue I'm experiencing is...</label>
         <br>
         <textarea id="description" name="description" rows="4" required></textarea>
         <br><br>
@@ -106,86 +130,86 @@
 
             // Populate options based on the selected theater
             if (theater === "emea") {
-                addOption(countryDropdown, "unitedKingdom", "United Kingdom");
-                addOption(countryDropdown, "germany", "Germany");
-                addOption(countryDropdown, "france", "France");
-                addOption(countryDropdown, "italy", "Italy");
-                addOption(countryDropdown, "spain", "Spain");
-                addOption(countryDropdown, "netherlands", "Netherlands");
-                addOption(countryDropdown, "belgium", "Belgium");
-                addOption(countryDropdown, "switzerland", "Switzerland");
-                addOption(countryDropdown, "sweden", "Sweden");
-                addOption(countryDropdown, "norway", "Norway");
-                addOption(countryDropdown, "denmark", "Denmark");
-                addOption(countryDropdown, "finland", "Finland");
+                addOption(countryDropdown, "otherEmea", "Other (my country is not listed below)");
                 addOption(countryDropdown, "austria", "Austria");
-                addOption(countryDropdown, "portugal", "Portugal");
+                addOption(countryDropdown, "bahrain", "Bahrain");
+                addOption(countryDropdown, "belgium", "Belgium");
+                addOption(countryDropdown, "denmark", "Denmark");
+                addOption(countryDropdown, "egypt", "Egypt");
+                addOption(countryDropdown, "finland", "Finland");
+                addOption(countryDropdown, "france", "France");
+                addOption(countryDropdown, "germany", "Germany");
+                addOption(countryDropdown, "ghana", "Ghana");
                 addOption(countryDropdown, "greece", "Greece");
                 addOption(countryDropdown, "ireland", "Ireland");
-                addOption(countryDropdown, "unitedArabEmirates", "United Arab Emirates");
-                addOption(countryDropdown, "saudiArabia", "Saudi Arabia");
-                addOption(countryDropdown, "qatar", "Qatar");
-                addOption(countryDropdown, "oman", "Oman");
-                addOption(countryDropdown, "bahrain", "Bahrain");
-                addOption(countryDropdown, "kuwait", "Kuwait");
-                addOption(countryDropdown, "jordan", "Jordan");
-                addOption(countryDropdown, "lebanon", "Lebanon");
                 addOption(countryDropdown, "israel", "Israel");
-                addOption(countryDropdown, "southAfrica", "South Africa");
-                addOption(countryDropdown, "nigeria", "Nigeria");
-                addOption(countryDropdown, "kenya", "Kenya");
-                addOption(countryDropdown, "egypt", "Egypt");
-                addOption(countryDropdown, "morocco", "Morocco");
-                addOption(countryDropdown, "algeria", "Algeria");
-                addOption(countryDropdown, "tunisia", "Tunisia");
-                addOption(countryDropdown, "ghana", "Ghana");
+                addOption(countryDropdown, "italy", "Italy");
                 addOption(countryDropdown, "ivoryCoast", "Ivory Coast");
-                addOption(countryDropdown, "otherEmea", "Other");
+                addOption(countryDropdown, "jordan", "Jordan");
+                addOption(countryDropdown, "kenya", "Kenya");
+                addOption(countryDropdown, "kuwait", "Kuwait");
+                addOption(countryDropdown, "lebanon", "Lebanon");
+                addOption(countryDropdown, "morocco", "Morocco");
+                addOption(countryDropdown, "netherlands", "Netherlands");
+                addOption(countryDropdown, "nigeria", "Nigeria");
+                addOption(countryDropdown, "norway", "Norway");
+                addOption(countryDropdown, "oman", "Oman");
+                addOption(countryDropdown, "portugal", "Portugal");
+                addOption(countryDropdown, "qatar", "Qatar");
+                addOption(countryDropdown, "saudiArabia", "Saudi Arabia");
+                addOption(countryDropdown, "southAfrica", "South Africa");
+                addOption(countryDropdown, "spain", "Spain");
+                addOption(countryDropdown, "sweden", "Sweden");
+                addOption(countryDropdown, "switzerland", "Switzerland");
+                addOption(countryDropdown, "tunisia", "Tunisia");
+                addOption(countryDropdown, "unitedArabEmirates", "United Arab Emirates");
+                addOption(countryDropdown, "unitedKingdom", "United Kingdom");
                 // Add more options as needed for EMEA
             } else if (theater === "apjc") {
-                addOption(countryDropdown, "china", "China");
-                addOption(countryDropdown, "india", "India");
-                addOption(countryDropdown, "japan", "Japan");
-                addOption(countryDropdown, "southKorea", "South Korea");
+                addOption(countryDropdown, "otherApjc", "Other (my country is not listed below)");
                 addOption(countryDropdown, "australia", "Australia");
-                addOption(countryDropdown, "singapore", "Singapore");
-                addOption(countryDropdown, "malaysia", "Malaysia");
-                addOption(countryDropdown, "thailand", "Thailand");
-                addOption(countryDropdown, "indonesia", "Indonesia");
-                addOption(countryDropdown, "vietnam", "Vietnam");
-                addOption(countryDropdown, "philippines", "Philippines");
-                addOption(countryDropdown, "newZealand", "New Zealand");
-                addOption(countryDropdown, "taiwan", "Taiwan");
-                addOption(countryDropdown, "hongKong", "Hong Kong");
                 addOption(countryDropdown, "bangladesh", "Bangladesh");
-                addOption(countryDropdown, "pakistan", "Pakistan");
-                addOption(countryDropdown, "sriLanka", "Sri Lanka");
-                addOption(countryDropdown, "myanmar", "Myanmar");
-                addOption(countryDropdown, "cambodia", "Cambodia");
-                addOption(countryDropdown, "laos", "Laos");
-                addOption(countryDropdown, "maldives", "Maldives");
-                addOption(countryDropdown, "nepal", "Nepal");
                 addOption(countryDropdown, "bhutan", "Bhutan");
+                addOption(countryDropdown, "cambodia", "Cambodia");
+                addOption(countryDropdown, "china", "China");
                 addOption(countryDropdown, "fiji", "Fiji");
+                addOption(countryDropdown, "hongKong", "Hong Kong");
+                addOption(countryDropdown, "india", "India");
+                addOption(countryDropdown, "indonesia", "Indonesia");
+                addOption(countryDropdown, "japan", "Japan");
+                addOption(countryDropdown, "kiribati", "Kiribati");
+                addOption(countryDropdown, "laos", "Laos");
+                addOption(countryDropdown, "malaysia", "Malaysia");
+                addOption(countryDropdown, "maldives", "Maldives");
+                addOption(countryDropdown, "marshallIslands", "Marshall Islands");
+                addOption(countryDropdown, "micronesia", "Micronesia");
+                addOption(countryDropdown, "myanmar", "Myanmar");
+                addOption(countryDropdown, "nepal", "Nepal");
+                addOption(countryDropdown, "newZealand", "New Zealand");
+                addOption(countryDropdown, "pakistan", "Pakistan");
+                addOption(countryDropdown, "palau", "Palau");
                 addOption(countryDropdown, "papuaNewGuinea", "Papua New Guinea");
-                addOption(countryDropdown, "solomonIslands", "Solomon Islands");
-                addOption(countryDropdown, "vanuatu", "Vanuatu");
+                addOption(countryDropdown, "philippines", "Philippines");
                 addOption(countryDropdown, "samoa", "Samoa");
+                addOption(countryDropdown, "singapore", "Singapore");
+                addOption(countryDropdown, "solomonIslands", "Solomon Islands");
+                addOption(countryDropdown, "southKorea", "South Korea");
+                addOption(countryDropdown, "sriLanka", "Sri Lanka");
+                addOption(countryDropdown, "taiwan", "Taiwan");
+                addOption(countryDropdown, "thailand", "Thailand");
                 addOption(countryDropdown, "tonga", "Tonga");
                 addOption(countryDropdown, "tuvalu", "Tuvalu");
-                addOption(countryDropdown, "kiribati", "Kiribati");
-                addOption(countryDropdown, "micronesia", "Micronesia");
-                addOption(countryDropdown, "marshallIslands", "Marshall Islands");
-                addOption(countryDropdown, "palau", "Palau");
-                addOption(countryDropdown, "otherApjc", "Other");
+                addOption(countryDropdown, "vanuatu", "Vanuatu");
+                addOption(countryDropdown, "vietnam", "Vietnam");
                 // Add more options as needed for APJC
             } else if (theater === "na") {
-                addOption(countryDropdown, "unitedStates", "United States");
-                addOption(countryDropdown, "canada", "Canada");
-                addOption(countryDropdown, "mexico", "Mexico");
+                addOption(countryDropdown, "otherNa", "Other (my country is not listed below)");
                 addOption(countryDropdown, "bermuda", "Bermuda");
+                addOption(countryDropdown, "canada", "Canada");
                 addOption(countryDropdown, "greenland", "Greenland");
+                addOption(countryDropdown, "mexico", "Mexico");
                 addOption(countryDropdown, "saintPierreMiquelon", "Saint Pierre and Miquelon");
+                addOption(countryDropdown, "unitedStates", "United States");
                 // Add more options as needed for NA
             }
         }
