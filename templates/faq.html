@@ -30,7 +30,11 @@
 </head>
 
 <body>
+    {% if current_user.is_authenticated %}
     {% include 'menu2.html' %}
+    {% else %}
+    {% include 'menu.html' %}
+    {% endif %}
 
     <div class="container">
         <h1>Frequently Asked Questions</h1>

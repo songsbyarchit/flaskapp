@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
-from flask_login import current_user, login_required, LoginManager, UserMixin, login_user
+from flask_login import current_user, login_required, LoginManager, UserMixin, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy.exc import IntegrityError
@@ -207,14 +207,15 @@ def register():
     return render_template("register.html")
 
 @app.route("/logout", methods=['POST'])
+@login_required
 def logout():
-    session.pop('user_id', None)
+    logout_user()  # Log out the user
     flash("You have been logged out.", 'success')
     return redirect(url_for('logout_page'))
 
 @app.route("/logout_page")
 def logout_page():
-    return render_template("logout.html")
+    return render_template("logout_page.html")
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -292,16 +293,22 @@ def view_tickets():
     return render_template('dashboard/view_tickets.html', user_tickets=user_tickets)
 
 @app.route("/dashboard/overview")
+@login_required
 def overview():
     return render_template("dashboard/overview.html")
 
-@app.route("/dashboard/faq")
+@app.route("/faq")
 def faq():
-    return render_template("dashboard/faq.html")
+    return render_template("faq.html")
 
 @app.route("/dashboard")
+@login_required
 def dashboard():
     return redirect(url_for('overview'))
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
 
 # Run the app locally on localhost
 if __name__ == "__main__":

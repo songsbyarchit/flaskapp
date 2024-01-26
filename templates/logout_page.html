@@ -17,7 +17,11 @@
 </head>
 
 <body>
+    {% if current_user.is_authenticated %}
+    {% include 'menu2.html' %}
+    {% else %}
     {% include 'menu.html' %}
+    {% endif %}
     <h1>You have been logged out</h1>
     <p>Thank you for using our application.</p>
 </body>

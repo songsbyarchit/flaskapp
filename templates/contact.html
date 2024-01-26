@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles.css">
+    <style>
+        /* Add your custom styles here */
+
+        /* Optional: Adjust the menu style */
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: white;
+        }
+
+        /* Adjust the main text style */
+        .container.mt-4 {
+            text-align: left;
+            /* Left-align the text */
+            padding: 0;
+            /* Remove any padding */
+        }
+    </style>
+</head>
+
+<body>
+    {% if current_user.is_authenticated %}
+    {% include 'menu2.html' %}
+    {% else %}
+    {% include 'menu.html' %}
+    {% endif %}
+
+    <h1>Contact Us</h1>
+    <p>Please find our contact information below:</p>
+    <p>Email: example@example.com</p>
+    <p>Phone: +1234567890</p>
+
+    <!-- Optional: Add Bootstrap JS and jQuery for menu functionality -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>
