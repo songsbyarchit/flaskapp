@@ -321,4 +321,4 @@ def contact():
 
 # Run the app locally on localhost
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)  # Set debug to True for development purposes
+    app.run(debug=True, port=8080)  # Set debug to True for development purposes

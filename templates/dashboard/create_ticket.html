@@ -13,6 +13,7 @@
 <body>
     {% include 'menu2.html' %}
 
+    <br>
     <h1>Create Ticket</h1>
 
     <form method="POST" action="{{ url_for('create_ticket') }}">
@@ -25,6 +26,7 @@
 
         <label for="department">Department:</label>
         <select id="department" name="department" required>
+            <option value="" disabled selected>- - -</option>
             <option value="engineering">Engineering</option>
             <option value="marketing">Marketing</option>
             <option value="sales">Sales</option>
@@ -62,6 +64,7 @@
 
         <label for="bestMethod">I prefer to be reached by:</label>
         <select id="bestMethod" name="bestMethod">
+            <option value="" disabled selected>- - -</option>
             <option value="phoneCall">Phone Call</option>
             <option value="textMessage">Text Message</option>
             <option value="email">Email</option>
@@ -70,6 +73,7 @@
 
         <label for="severity">Severity of Issue:</label>
         <select id="severity" name="severity" required>
+            <option value="" disabled selected>- - -</option>
             <option value="1">1 - Slightly Impacting Role</option>
             <option value="2">2 - Somewhat Impacting Role</option>
             <option value="3">3 - Significantly Impacting Role</option>
@@ -80,6 +84,7 @@
 
         <label for="technology">I am experiencing issues with:</label>
         <select id="technology" name="technology" required>
+            <option value="" disabled selected>- - -</option>
             <option value="aha">Aha!</option>
             <option value="ciscoCommerceWorkspace">Cisco Commerce Workspace (CCW)</option>
             <option value="ciscoUnifiedCommunicationsManager">Cisco Unified Communications Manager (CUCM)</option>

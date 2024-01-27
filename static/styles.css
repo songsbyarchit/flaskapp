@@ -2,8 +2,8 @@
 
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+    margin: 5px;
+    padding: 5px;
     background-image: url('images/background.png');
     background-size: cover;
     background-repeat: no-repeat;
@@ -12,6 +12,8 @@ body {
 nav {
     background-color: #333;
     overflow: hidden;
+    border-radius: 10px;
+    max-width: 630px;
 }
 
 nav a {
