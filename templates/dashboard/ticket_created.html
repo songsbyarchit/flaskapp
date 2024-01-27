@@ -24,16 +24,12 @@
 
 <body>
     {% include 'menu2.html' %}
-    <h1>Ticket Created</h1>
-    <p>Your ticket has been successfully created. Thank you!</p>
-    <hr>
-    <!-- Links to create another ticket or view existing tickets -->
-    <p>
-        Have another issue? <a href="{{ url_for('create_ticket') }}" role="button">Create another ticket here</a>
-    </p>
-
-    <p>
-        Want to see your tickets? <a href="{{ url_for('view_tickets') }}" role="button">View existing tickets here</a>
+    <br>
+    <h1>Your ticket has been successfully created. Thank you!</h1>
+    <br>
+    Have another issue? <a href="{{ url_for('create_ticket') }}" role="button">Create another ticket here</a>
+    <br><br>
+    Want to see your tickets? <a href="{{ url_for('view_tickets') }}" role="button">View existing tickets here</a>
     </p>
 
     <!-- Optional: Add Bootstrap JS and jQuery for menu functionality -->

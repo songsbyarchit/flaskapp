@@ -10,15 +10,15 @@ body {
     background-repeat: no-repeat;
 }
 
-nav {
+.menu {
     background-color: #f5b92e;
     color: #561331;
     overflow: hidden;
-    border-radius: 10px;
-    max-width: 660px;
+    border-radius: 20px;
+    max-width: 440px;
 }
 
-nav a {
+.menu a {
     float: left;
     color: #561331;
     display: block;
@@ -28,7 +28,31 @@ nav a {
     text-decoration: none;
 }
 
-nav a:hover {
+.menu a:hover {
+    color: #f5b92e;
+    background-color: #851234;
+    text-decoration: none;
+}
+
+.menu2 {
+    background-color: #f5b92e;
+    color: #561331;
+    overflow: hidden;
+    border-radius: 20px;
+    max-width: 660px;
+}
+
+.menu2 a {
+    float: left;
+    color: #561331;
+    display: block;
+    font-weight: bold;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.menu2 a:hover {
     color: #f5b92e;
     background-color: #851234;
     text-decoration: none;
@@ -51,7 +75,7 @@ a {
 .logout-button {
     color: white;
     font-weight: bold;
-    background-color: #cc2e3e;
+    background-color: #561331;
     margin-top: 6px;
     margin-left: 12px;
     padding-top: 6px;
@@ -63,7 +87,7 @@ a {
 }
 
 .logout-button:hover {
-    background-color: #561331;
+    background-color: #cc2e3e;
     color: #f5b92e;
     text-decoration: none;
 }

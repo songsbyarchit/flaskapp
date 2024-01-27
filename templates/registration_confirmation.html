@@ -16,9 +16,10 @@
 
 <body>
     {% include 'menu.html' %}
-
+    <br>
     <h1>Registration Successful</h1>
-    <p>Thank you for registering, {{ username }}!</p>
+    <br>
+    <p>Thank you for registering, {{ current_user.username }}!</p>
 </body>
 
 </html>

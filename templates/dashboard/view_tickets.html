@@ -24,6 +24,7 @@
 
     <br>
     <h1>View Tickets</h1>
+    <br>
     <p>Hey {{ current_user.username }}, here are all your tickets:</p>
     <br>
     {% if user_tickets %}
@@ -40,23 +41,25 @@
                 <th>Severity</th>
                 <th>Technology</th>
                 <th>Description</th>
-                <th>Created At</th>
+                <th>Date Created</th>
+                <th>Time Created</th>
             </tr>
         </thead>
         <tbody>
             {% for ticket in user_tickets %}
             <tr>
                 <td>{{ ticket.id }}</td>
-                <td>{{ ticket.department }}</td>
-                <td>{{ ticket.theater }}</td>
+                <td>{{ ticket.department|title }}</td>
+                <td>{{ ticket.theater|upper }}</td>
                 <td>{{ ticket.country }}</td>
                 <td>{{ ticket.phone_number }}</td>
                 <td>{{ ticket.email }}</td>
-                <td>{{ ticket.best_method }}</td>
+                <td>{{ ticket.best_method|title }}</td>
                 <td>{{ ticket.severity }}</td>
-                <td>{{ ticket.technology }}</td>
+                <td>{{ ticket.technology|title }}</td>
                 <td>{{ ticket.description }}</td>
-                <td>{{ ticket.created_at }}</td>
+                <td>{{ ticket.created_at.strftime('%d-%m-%Y %H:%M:%S')[0:10] }}</td>
+                <td>{{ ticket.created_at.strftime('%Y-%m-%d %H:%M:%S')[11:19] }}</td>
             </tr>
             {% endfor %}
         </tbody>
