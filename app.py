@@ -97,8 +97,6 @@ def load_user(user_id):
 # db.create_all()
 
 def is_strong_password(password):
-    # Add your criteria for a strong password here
-    # For example, at least 8 characters, uppercase, lowercase, digit, and special character
     return (
         len(password) >= 8 and
         any(char.isupper() for char in password) and
@@ -106,6 +104,9 @@ def is_strong_password(password):
         any(char.isdigit() for char in password) and
         any(char in '!@#$%^&*()-_=+[]{}|;:\'",.<>?/~`' for char in password)
     )
+
+def is_strong_username(username):
+    return len(username) >= 8
 
 @app.before_request
 def before_request():
@@ -120,6 +121,10 @@ def debug_session():
 @app.route('/debug_session_contents')
 def debug_session_contents():
     return str(session.items())
+
+@app.route('/dashboard/ticket_created')
+def ticket_created():
+    return render_template('dashboard/ticket_created.html')
 
 @app.route("/login_confirmation")
 @login_required
@@ -175,6 +180,11 @@ def register():
         if not is_strong_password(password):
             password_valid = False
             flash("Password must be at least 8 characters long and include uppercase, lowercase, digit, and special character.", 'error')
+
+        # Check if the username meets the strength criteria
+        if not is_strong_username(username):
+            flash("Username must be at least 8 characters long.", 'error')
+            return redirect(url_for('register'))
 
         # Check if password matches confirm password
         if password != confirm_password:
@@ -280,7 +290,7 @@ def create_ticket():
         db.session.commit()
 
         flash('Ticket created successfully!', 'success')
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('ticket_created'))
 
     return render_template('dashboard/create_ticket.html')
 
@@ -289,7 +299,6 @@ def create_ticket():
 def view_tickets():
     # Retrieve the user's tickets, ordered by creation date (most recent first)
     user_tickets = Ticket.query.filter_by(user=current_user).order_by(Ticket.created_at.desc()).all()
-
     return render_template('dashboard/view_tickets.html', user_tickets=user_tickets)
 
 @app.route("/dashboard/overview")
