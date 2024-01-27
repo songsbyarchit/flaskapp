@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import logging
+from markupsafe import escape
 
 app = Flask(__name__)
 login_manager = LoginManager(app)
@@ -95,6 +96,11 @@ def load_user(user_id):
 
 # Create the database and tables
 # db.create_all()
+
+def camel_to_title_case(s):
+    return ''.join([' ' + c.lower() if c.isupper() else c for c in s]).strip().title()
+
+app.jinja_env.filters['camel_to_title_case'] = camel_to_title_case
 
 def is_strong_password(password):
     return (

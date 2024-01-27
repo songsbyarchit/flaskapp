@@ -63,12 +63,17 @@ a {
     /* Yellow color hex code */
 }
 
+a:hover {
+    color: #cc2e3e;
+    text-decoration: none;
+}
+
 .btn-link:not(.logout-button) {
     color: #f5b92e;
 }
 
 .btn-link:not(.logout-button):hover {
-    color: white;
+    color: #cc2e3e;
     text-decoration: none;
 }
 
