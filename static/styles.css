@@ -2,38 +2,70 @@
 
 body {
     font-family: Arial, sans-serif;
+    color: #ddd;
     margin: 5px;
     padding: 5px;
-    background-image: url('images/background.png');
+    background-color: #1d1b1f;
     background-size: cover;
     background-repeat: no-repeat;
 }
 
 nav {
-    background-color: #333;
+    background-color: #f5b92e;
+    color: #561331;
     overflow: hidden;
     border-radius: 10px;
-    max-width: 630px;
+    max-width: 660px;
 }
 
 nav a {
     float: left;
+    color: #561331;
     display: block;
-    color: white;
+    font-weight: bold;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
 }
 
 nav a:hover {
-    background-color: #ddd;
-    color: black;
+    color: #f5b92e;
+    background-color: #851234;
+    text-decoration: none;
+}
+
+a {
+    color: #f5b92e;
+    /* Yellow color hex code */
+}
+
+.btn-link:not(.logout-button) {
+    color: #f5b92e;
+}
+
+.btn-link:not(.logout-button):hover {
+    color: white;
+    text-decoration: none;
 }
 
 .logout-button {
-    margin-top: 7px;
-    margin-left: 7px;
+    color: white;
+    font-weight: bold;
+    background-color: #cc2e3e;
+    margin-top: 6px;
+    margin-left: 12px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 10px;
     /* Adjust this value as needed */
+}
+
+.logout-button:hover {
+    background-color: #561331;
+    color: #f5b92e;
+    text-decoration: none;
 }
 
 /* Optional: Add custom styles for FAQs */

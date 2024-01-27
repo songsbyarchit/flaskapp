@@ -304,7 +304,7 @@ def view_tickets():
 @app.route("/dashboard/overview")
 @login_required
 def overview():
-    return render_template("dashboard/overview.html")
+    return render_template('dashboard/overview.html')  # Pass username and ticket data to the template
 
 @app.route("/faq")
 def faq():

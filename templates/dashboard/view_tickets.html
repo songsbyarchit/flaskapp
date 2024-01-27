@@ -7,11 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Tickets</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles.css">
     <style>
         /* Custom CSS for thicker table lines */
         table.table th,
         table.table td {
-            border: 2px solid black;
+            border: 2px solid #cc2e3e;
+            color: #ddd;
             /* Adjust the border thickness as needed */
         }
     </style>
@@ -22,6 +24,7 @@
 
     <br>
     <h1>View Tickets</h1>
+    <p>Hey {{ current_user.username }}, here are all your tickets:</p>
     <br>
     {% if user_tickets %}
     <table class="table">

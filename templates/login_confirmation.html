@@ -20,7 +20,9 @@
     {% include 'menu2.html' %}
 
     {% if current_user.is_authenticated %}
+    <br>
     <h1>Login Successful</h1>
+    <br>
     <p>Welcome back, {{ current_user.username }}!</p>
     {% else %}
     <p>You are not logged in.</p>
