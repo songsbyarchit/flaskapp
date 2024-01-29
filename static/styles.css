@@ -2,7 +2,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    color: #ddd;
+    color: lightgray;
     margin: 5px;
     padding: 5px;
     background-color: #1d1b1f;
@@ -15,14 +15,14 @@ body {
     color: #561331;
     overflow: hidden;
     border-radius: 20px;
-    max-width: 440px;
+    max-width: 430px;
 }
 
 .menu a {
     float: left;
     color: #561331;
     display: block;
-    font-weight: bold;
+    font-weight: bolder;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -46,7 +46,7 @@ body {
     float: left;
     color: #561331;
     display: block;
-    font-weight: bold;
+    font-weight: bolder;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -68,19 +68,25 @@ a:hover {
     text-decoration: none;
 }
 
+h1 {
+    font-weight: bolder;
+}
+
 .btn-link:not(.logout-button) {
     color: #f5b92e;
+    font-weight: bolder;
 }
 
 .btn-link:not(.logout-button):hover {
     color: #cc2e3e;
     text-decoration: none;
+    font-weight: bolder;
 }
 
 .logout-button {
     color: white;
     font-weight: bold;
-    background-color: #561331;
+    background-color: #cc2e3e;
     margin-top: 6px;
     margin-left: 12px;
     padding-top: 6px;
@@ -92,16 +98,85 @@ a:hover {
 }
 
 .logout-button:hover {
-    background-color: #cc2e3e;
+    background-color: #1d1b1f;
     color: #f5b92e;
     text-decoration: none;
 }
 
 /* Optional: Add custom styles for FAQs */
 .faq-item {
-    margin-bottom: 20px;
+    font-weight: bolder;
 }
 
 .faq-item p {
+    font-weight: bolder;
+}
+
+button {
+    font-weight: bolder;
+    color: #851234;
     margin-top: 10px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 10px;
+    background-color: #f5b92e;
+}
+
+button:hover {
+    margin-top: 10px;
+    color: #f5b92e;
+    font-weight: bolder;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 10px;
+    background-color: #851234;
+}
+
+textarea {
+    padding: 8px;
+    /* Padding inside input fields */
+    border-radius: 10px;
+    /* Rounded corners */
+    border: 1px solid #ccc;
+    /* Border color */
+    width: 1000px;
+    /* Set a fixed width */
+    height: 100px;
+    box-sizing: border-box;
+    /* Include padding and border in width */
+    margin-bottom: 10px;
+    /* Space below each input field */
+    background-color: lightgray;
+}
+
+textarea:hover {
+    background-color: lightslategray;
+}
+
+
+select,
+input {
+    padding: 8px;
+    /* Padding inside input fields */
+    border-radius: 10px;
+    /* Rounded corners */
+    border: 1px solid #ccc;
+    /* Border color */
+    width: 250px;
+    /* Set a fixed width */
+    height: 40px;
+    box-sizing: border-box;
+    /* Include padding and border in width */
+    margin-bottom: 10px;
+    /* Space below each input field */
+    background-color: lightgray;
+}
+
+select:hover,
+input:hover {
+    background-color: lightslategray;
 }

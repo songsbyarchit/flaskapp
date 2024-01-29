@@ -208,6 +208,7 @@ def register():
                 db.session.commit()
                 registration_successful = True
                 flash("Registration successful. You can now login.", 'success')
+                session['username'] = username
                 return redirect(url_for('registration_confirmation', username=username))
             
             except IntegrityError as e:
