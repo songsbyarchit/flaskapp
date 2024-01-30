@@ -4,15 +4,17 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 from markupsafe import escape
+import atexit
 
 app = Flask(__name__)
 login_manager = LoginManager(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SECRET_KEY'] = 'your_secret_key'
 db = SQLAlchemy(app)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -84,6 +86,10 @@ class Ticket(db.Model):
 
 # Create the application context
 app.app_context().push()
+
+@atexit.register
+def shutdown_session():
+    session.clear()  # Clear session data on server shutdown
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -227,6 +233,7 @@ def register():
 @login_required
 def logout():
     logout_user()  # Log out the user
+    session.clear()  # Clear all session data
     flash("You have been logged out.", 'success')
     return redirect(url_for('logout_page'))
 
@@ -321,6 +328,43 @@ def faq():
 @login_required
 def dashboard():
     return redirect(url_for('overview'))
+
+@app.route('/dashboard/edit_ticket/<ticket_id>', methods=['GET', 'POST'])
+@login_required
+def edit_ticket(ticket_id):
+    # Retrieve the ticket to be edited from the database
+    ticket = Ticket.query.get(ticket_id)
+
+    if not ticket:
+        flash('Ticket not found!', 'error')
+        return redirect(url_for('view_tickets'))
+
+    if request.method == 'POST':
+        # Update the ticket details based on the form data
+        ticket.full_name = request.form['fullName']
+        ticket.department = request.form['department']
+        ticket.theater = request.form['theater']
+        ticket.country = request.form['country']
+        ticket.phone_number = request.form['phoneNumber']
+        ticket.email = request.form['email']
+        ticket.best_method = request.form['bestMethod']
+        ticket.severity = request.form['severity']
+        ticket.technology = request.form['technology']
+        ticket.description = request.form['description']
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        flash('Ticket updated successfully!', 'success')
+        return redirect(url_for('edit_confirmation'))
+
+    # Render the edit_ticket.html template with the ticket data
+    return render_template('dashboard/edit_ticket.html', ticket=ticket)
+
+@app.route('/dashboard/edit_confirmation')
+@login_required
+def edit_confirmation():
+    return render_template('dashboard/edit_confirmation.html')
 
 @app.route("/contact")
 def contact():

@@ -120,19 +120,11 @@
 
     <script>
         function updateCountries() {
-            // Get the selected theater value
             var theater = document.getElementById("theater").value;
-
-            // Get the country dropdown
             var countryDropdown = document.getElementById("country");
-
-            // Enable the country dropdown
             countryDropdown.disabled = false;
-
-            // Clear existing options
             countryDropdown.innerHTML = "";
 
-            // Populate options based on the selected theater
             if (theater === "emea") {
                 addOption(countryDropdown, "otherEmea", "Other (my country is not listed below)");
                 addOption(countryDropdown, "austria", "Austria");
@@ -168,7 +160,6 @@
                 addOption(countryDropdown, "tunisia", "Tunisia");
                 addOption(countryDropdown, "unitedArabEmirates", "United Arab Emirates");
                 addOption(countryDropdown, "unitedKingdom", "United Kingdom");
-                // Add more options as needed for EMEA
             } else if (theater === "apjc") {
                 addOption(countryDropdown, "otherApjc", "Other (my country is not listed below)");
                 addOption(countryDropdown, "australia", "Australia");
@@ -205,7 +196,6 @@
                 addOption(countryDropdown, "tuvalu", "Tuvalu");
                 addOption(countryDropdown, "vanuatu", "Vanuatu");
                 addOption(countryDropdown, "vietnam", "Vietnam");
-                // Add more options as needed for APJC
             } else if (theater === "na") {
                 addOption(countryDropdown, "otherNa", "Other (my country is not listed below)");
                 addOption(countryDropdown, "bermuda", "Bermuda");
@@ -214,7 +204,6 @@
                 addOption(countryDropdown, "mexico", "Mexico");
                 addOption(countryDropdown, "saintPierreMiquelon", "Saint Pierre and Miquelon");
                 addOption(countryDropdown, "unitedStates", "United States");
-                // Add more options as needed for NA
             }
         }
 

@@ -1,4 +1,4 @@
-<!-- logout.html -->
+<!-- edit_confirmation.html -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logout Page</title>
+    <title>Edit Confirmation</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/styles.css">
     <style>
@@ -17,17 +17,13 @@
 </head>
 
 <body>
-    {% if current_user.is_authenticated %}
     {% include 'menu2.html' %}
-    {% else %}
-    {% include 'menu.html' %}
-    {% endif %}
+
     <br>
-    <h1>You have been logged out</h1>
+    <h1>Edit Confirmation</h1>
     <br>
-    <p>Thank you for using our application.</p>
-    <p>Click <a href="{{ url_for('login') }}" class="textlink">here</a> to login again.
-    </p>
+    <p>Your ticket has been updated successfully!</p>
+    <a href="{{ url_for('view_tickets') }}" class="textlink">Back to Tickets</a>
 </body>
 
 </html>

@@ -10,38 +10,23 @@ body {
     background-repeat: no-repeat;
 }
 
-.menu {
-    background-color: #f5b92e;
-    color: #561331;
-    overflow: hidden;
-    border-radius: 20px;
-    max-width: 430px;
-}
-
-.menu a {
-    float: left;
-    color: #561331;
-    display: block;
-    font-weight: bolder;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-}
-
-.menu a:hover {
-    color: #f5b92e;
-    background-color: #851234;
-    text-decoration: none;
-}
-
+.menu,
 .menu2 {
     background-color: #f5b92e;
     color: #561331;
     overflow: hidden;
     border-radius: 20px;
+}
+
+.menu {
+    max-width: 429.5px;
+}
+
+.menu2 {
     max-width: 660px;
 }
 
+.menu a,
 .menu2 a {
     float: left;
     color: #561331;
@@ -52,34 +37,33 @@ body {
     text-decoration: none;
 }
 
+.menu a:hover,
 .menu2 a:hover {
     color: #f5b92e;
     background-color: #851234;
     text-decoration: none;
 }
 
-a {
+a,
+.btn-link:not(.logout-button),
+button {
     color: #f5b92e;
     /* Yellow color hex code */
 }
 
-a:hover {
-    color: #cc2e3e;
-    text-decoration: none;
-}
-
-h1 {
-    font-weight: bolder;
-}
-
-.btn-link:not(.logout-button) {
+a:hover,
+.btn-link:not(.logout-button):hover,
+.logout-button:hover,
+button:hover {
     color: #f5b92e;
-    font-weight: bolder;
+    /* Restored to original color */
+    background-color: #cc2e3e;
+    /* Restored to original color */
+    text-decoration: none;
 }
 
+h1,
 .btn-link:not(.logout-button):hover {
-    color: #cc2e3e;
-    text-decoration: none;
     font-weight: bolder;
 }
 
@@ -87,12 +71,9 @@ h1 {
     color: white;
     font-weight: bold;
     background-color: #cc2e3e;
-    margin-top: 6px;
+    margin-top: 4px;
     margin-left: 12px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 6px 20px;
     border-radius: 10px;
     /* Adjust this value as needed */
 }
@@ -104,79 +85,94 @@ h1 {
 }
 
 /* Optional: Add custom styles for FAQs */
-.faq-item {
-    font-weight: bolder;
-}
-
+.faq-item,
 .faq-item p {
     font-weight: bolder;
 }
 
-button {
+button,
+textarea,
+select,
+input {
     font-weight: bolder;
-    color: #851234;
-    margin-top: 10px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 10px;
-    background-color: #f5b92e;
-}
-
-button:hover {
-    margin-top: 10px;
-    color: #f5b92e;
-    font-weight: bolder;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 10px;
-    background-color: #851234;
-}
-
-textarea {
     padding: 8px;
-    /* Padding inside input fields */
     border-radius: 10px;
-    /* Rounded corners */
     border: 1px solid #ccc;
-    /* Border color */
-    width: 1000px;
-    /* Set a fixed width */
-    height: 100px;
     box-sizing: border-box;
-    /* Include padding and border in width */
     margin-bottom: 10px;
-    /* Space below each input field */
     background-color: lightgray;
 }
 
-textarea:hover {
+button:hover,
+textarea:hover,
+select:hover,
+input:hover {
     background-color: lightslategray;
+    color: white;
+}
+
+textarea {
+    width: 1000px;
+    height: 100px;
+}
+
+.textlink {
+    font-weight: bolder;
+}
+
+.btn.btn-link:hover,
+.textlink:hover {
+    background-color: transparent !important;
+    font-weight: normal;
+}
+
+/* Add this CSS to style the login and register buttons */
+.login-btn,
+.register-btn {
+    color: #561331;
+    /* Text color */
+    background-color: #f5b92e;
+    /* Background color */
+    border-width: 2px;
+    border-color: #851234;
+    padding: 14px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: bolder;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.login-btn:hover,
+.register-btn:hover {
+    background-color: #851234;
+    /* Hover background color */
+    color: #f5b92e;
+    border-color: #f5b92e;
+    border-width: 2px;
+    /* Hover text color */
 }
 
 
 select,
 input {
-    padding: 8px;
-    /* Padding inside input fields */
-    border-radius: 10px;
-    /* Rounded corners */
-    border: 1px solid #ccc;
-    /* Border color */
     width: 250px;
-    /* Set a fixed width */
     height: 40px;
-    box-sizing: border-box;
-    /* Include padding and border in width */
-    margin-bottom: 10px;
-    /* Space below each input field */
-    background-color: lightgray;
 }
 
-select:hover,
-input:hover {
-    background-color: lightslategray;
+.edit-link img {
+    width: 30px;
+    height: auto;
+}
+
+.edit-link img:hover {
+    background-color: #cc2e3e;
+    border-radius: 2px;
+    border: 2px
+}
+
+.faqtitle {
+    color: lightgray;
 }

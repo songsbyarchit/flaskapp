@@ -1,0 +1,276 @@
+<!-- templates/edit_ticket.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Ticket</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+
+<body>
+    {% include 'menu2.html' %}
+
+    <br>
+    <h1>Edit Ticket</h1>
+
+    <form method="POST" action="{{ url_for('edit_ticket', ticket_id=ticket.id) }}">
+        <br>
+        <!-- Full Name -->
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" name="fullName" value="{{ ticket.full_name }}" required>
+        <br>
+
+        <!-- Department -->
+        <label for="department">Department:</label>
+        <select id="department" name="department" required>
+            <option value="engineering">Engineering</option>
+            <option value="marketing">Marketing</option>
+            <option value="sales">Sales</option>
+            <option value="cx">CX</option>
+            <option value="tech-sales">Tech Sales</option>
+            <option value="other">Other</option>
+        </select>
+        <br>
+
+        <!-- Theater -->
+        <label for="theater">Theater:</label>
+        <select id="theater" name="theater" required>
+            <option value="emea">EMEA</option>
+            <option value="apjc">APJC</option>
+            <option value="na">NA</option>
+        </select>
+        <br>
+
+        <!-- Country -->
+        <!-- Country -->
+        <select id="country" name="country" required>
+            {% for option in countries %}
+            <option value="{{ option.value }}" {% if option.value==ticket.country %} selected {% endif %}>
+                {{ option.label }}
+            </option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <script>
+            function updateCountries() {
+                var theater = document.getElementById("theater").value;
+                var countryDropdown = document.getElementById("country");
+                countryDropdown.disabled = false;
+                countryDropdown.innerHTML = "";
+
+                if (theater === "emea") {
+                    addOption(countryDropdown, "otherEmea", "Other (my country is not listed below)");
+                    // Add EMEA countries here
+                    var emeaCountries = [
+                        { 'value': 'austria', 'label': 'Austria' },
+                        { 'value': 'bahrain', 'label': 'Bahrain' },
+                        { 'value': 'belgium', 'label': 'Belgium' },
+                        { 'value': 'denmark', 'label': 'Denmark' },
+                        { 'value': 'egypt', 'label': 'Egypt' },
+                        { 'value': 'finland', 'label': 'Finland' },
+                        { 'value': 'france', 'label': 'France' },
+                        { 'value': 'germany', 'label': 'Germany' },
+                        { 'value': 'ghana', 'label': 'Ghana' },
+                        { 'value': 'greece', 'label': 'Greece' },
+                        { 'value': 'ireland', 'label': 'Ireland' },
+                        { 'value': 'israel', 'label': 'Israel' },
+                        { 'value': 'italy', 'label': 'Italy' },
+                        { 'value': 'ivoryCoast', 'label': 'Ivory Coast' },
+                        { 'value': 'jordan', 'label': 'Jordan' },
+                        { 'value': 'kenya', 'label': 'Kenya' },
+                        { 'value': 'kuwait', 'label': 'Kuwait' },
+                        { 'value': 'lebanon', 'label': 'Lebanon' },
+                        { 'value': 'morocco', 'label': 'Morocco' },
+                        { 'value': 'netherlands', 'label': 'Netherlands' },
+                        { 'value': 'nigeria', 'label': 'Nigeria' },
+                        { 'value': 'norway', 'label': 'Norway' },
+                        { 'value': 'oman', 'label': 'Oman' },
+                        { 'value': 'portugal', 'label': 'Portugal' },
+                        { 'value': 'qatar', 'label': 'Qatar' },
+                        { 'value': 'saudiArabia', 'label': 'Saudi Arabia' },
+                        { 'value': 'southAfrica', 'label': 'South Africa' },
+                        { 'value': 'spain', 'label': 'Spain' },
+                        { 'value': 'sweden', 'label': 'Sweden' },
+                        { 'value': 'switzerland', 'label': 'Switzerland' },
+                        { 'value': 'tunisia', 'label': 'Tunisia' },
+                        { 'value': 'unitedArabEmirates', 'label': 'United Arab Emirates' },
+                        { 'value': 'unitedKingdom', 'label': 'United Kingdom' }
+                    ];
+
+                    emeaCountries.forEach(country => {
+                        addOption(countryDropdown, country.value, country.label);
+                    });
+                } else if (theater === "apjc") {
+                    addOption(countryDropdown, "otherApjc", "Other (my country is not listed below)");
+                    var apjcCountries = [
+                        { 'value': 'australia', 'label': 'Australia' },
+                        { 'value': 'bangladesh', 'label': 'Bangladesh' },
+                        { 'value': 'bhutan', 'label': 'Bhutan' },
+                        { 'value': 'cambodia', 'label': 'Cambodia' },
+                        { 'value': 'china', 'label': 'China' },
+                        { 'value': 'fiji', 'label': 'Fiji' },
+                        { 'value': 'hongKong', 'label': 'Hong Kong' },
+                        { 'value': 'india', 'label': 'India' },
+                        { 'value': 'indonesia', 'label': 'Indonesia' },
+                        { 'value': 'japan', 'label': 'Japan' },
+                        { 'value': 'kiribati', 'label': 'Kiribati' },
+                        { 'value': 'laos', 'label': 'Laos' },
+                        { 'value': 'malaysia', 'label': 'Malaysia' },
+                        { 'value': 'maldives', 'label': 'Maldives' },
+                        { 'value': 'marshallIslands', 'label': 'Marshall Islands' },
+                        { 'value': 'micronesia', 'label': 'Micronesia' },
+                        { 'value': 'myanmar', 'label': 'Myanmar' },
+                        { 'value': 'nepal', 'label': 'Nepal' },
+                        { 'value': 'newZealand', 'label': 'New Zealand' },
+                        { 'value': 'pakistan', 'label': 'Pakistan' },
+                        { 'value': 'palau', 'label': 'Palau' },
+                        { 'value': 'papuaNewGuinea', 'label': 'Papua New Guinea' },
+                        { 'value': 'philippines', 'label': 'Philippines' },
+                        { 'value': 'samoa', 'label': 'Samoa' },
+                        { 'value': 'singapore', 'label': 'Singapore' },
+                        { 'value': 'solomonIslands', 'label': 'Solomon Islands' },
+                        { 'value': 'southKorea', 'label': 'South Korea' },
+                        { 'value': 'sriLanka', 'label': 'Sri Lanka' },
+                        { 'value': 'taiwan', 'label': 'Taiwan' },
+                        { 'value': 'thailand', 'label': 'Thailand' },
+                        { 'value': 'tonga', 'label': 'Tonga' },
+                        { 'value': 'tuvalu', 'label': 'Tuvalu' },
+                        { 'value': 'vanuatu', 'label': 'Vanuatu' },
+                        { 'value': 'vietnam', 'label': 'Vietnam' }
+                    ];
+                    apjcCountries.forEach(country => {
+                        addOption(countryDropdown, country.value, country.label);
+                    });
+                } else if (theater === "na") {
+                    addOption(countryDropdown, "otherNa", "Other (my country is not listed below)");
+                    var naCountries = [
+                        { 'value': 'bermuda', 'label': 'Bermuda' },
+                        { 'value': 'canada', 'label': 'Canada' },
+                        { 'value': 'greenland', 'label': 'Greenland' },
+                        { 'value': 'mexico', 'label': 'Mexico' },
+                        { 'value': 'saintPierreMiquelon', 'label': 'Saint Pierre and Miquelon' },
+                        { 'value': 'unitedStates', 'label': 'United States' }
+                    ];
+                    naCountries.forEach(country => {
+                        addOption(countryDropdown, country.value, country.label);
+                    });
+                }
+            }
+
+            function addOption(selectElement, value, text) {
+                var option = document.createElement("option");
+                option.value = value;
+                option.text = text;
+                selectElement.add(option);
+            }
+        </script>
+
+
+        <!-- Phone Number -->
+        <label for="phoneNumber">The best phone number to reach me is:</label>
+        <input type="text" id="phoneNumber" name="phoneNumber" value="{{ ticket.phone_number }}" required>
+        <br>
+
+        <!-- Email -->
+        <label for="email">The best email address to reach me is:</label>
+        <input type="text" id="email" name="email" value="{{ ticket.email }}" required>
+        <br>
+
+        <!-- Best Method -->
+        <label for="bestMethod">I prefer to be reached by:</label>
+        <select id="bestMethod" name="bestMethod" required>
+            <option value="phoneCall">Phone Call</option>
+            <option value="textMessage">Text Message</option>
+            <option value="email">Email</option>
+        </select>
+        <br>
+
+        <!-- Severity -->
+        <label for="severity">Severity of Issue:</label>
+        <select id="severity" name="severity" required>
+            <option value="1">1 - Slightly Impacting Role</option>
+            <option value="2">2 - Somewhat Impacting Role</option>
+            <option value="3">3 - Significantly Impacting Role</option>
+            <option value="4">4 - Business Critical Issue</option>
+            <option value="5">5 - Mission Critical Issue</option>
+        </select>
+        <br>
+
+        <!-- Technology -->
+        <label for="technology">I am experiencing issues with:</label>
+        <select id="technology" name="technology" required>
+            <option value="aha">Aha!</option>
+            <option value="ciscoCommerceWorkspace">Cisco Commerce Workspace (CCW)</option>
+            <option value="ciscoUnifiedCommunicationsManager">Cisco Unified Communications Manager (CUCM)</option>
+            <option value="concur">Concur</option>
+            <option value="confluence">Confluence</option>
+            <option value="googleAccountError">Google Account Error</option>
+            <option value="macHardwareIssue">Mac Hardware Issue</option>
+            <option value="okta">Okta</option>
+            <option value="outlook">Outlook</option>
+            <option value="salesforce">Salesforce</option>
+            <option value="sharepoint">Sharepoint</option>
+            <option value="teamspace">Teamspace</option>
+            <option value="webex">Webex</option>
+            <option value="windowsHardwareIssue">Windows Hardware Issue</option>
+            <option value="workday">Workday</option>
+            <option value="other">Other</option>
+        </select>
+        <br>
+
+        <!-- Description -->
+        <label for="description">The issue I'm experiencing is...</label>
+        <br>
+        <textarea id="description" name="description" rows="3" required>{{ ticket.description }}</textarea>
+        <br><br>
+
+        <button type="submit">Update Ticket</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Call the function to populate the country dropdown
+            updateCountries();
+
+            var form = document.querySelector('form');
+
+            form.addEventListener('submit', function (event) {
+                // Validation for phone number
+                var phoneNumberInput = document.getElementById('phoneNumber');
+                var phoneNumber = phoneNumberInput.value;
+                var phoneNumberPattern = /^\d{10,11}$/;
+
+                if (!phoneNumberPattern.test(phoneNumber)) {
+                    alert('Please enter a valid phone number.');
+                    event.preventDefault(); // Prevent form submission
+                    return;
+                }
+
+                // Validation for email
+                var emailInput = document.getElementById('email');
+                var email = emailInput.value;
+                var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                if (!emailPattern.test(email)) {
+                    alert('Please enter a valid email address.');
+                    event.preventDefault(); // Prevent form submission
+                    return;
+                }
+
+                // Additional validation or actions can be added here as needed
+
+            });
+        });
+    </script>
+
+    <!-- Optional: Add Bootstrap JS and jQuery for menu functionality -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>

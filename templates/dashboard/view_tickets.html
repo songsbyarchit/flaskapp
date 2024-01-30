@@ -44,6 +44,7 @@
                 <th>Description</th>
                 <th>Date Created</th>
                 <th>Time Created</th>
+                <th>Edit</th> <!-- New column for edit action -->
             </tr>
         </thead>
         <tbody>
@@ -61,6 +62,11 @@
                 <td>{{ ticket.description }}</td>
                 <td>{{ ticket.created_at.strftime('%d-%m-%Y %H:%M:%S')[0:10] }}</td>
                 <td>{{ ticket.created_at.strftime('%Y-%m-%d %H:%M:%S')[11:19] }}</td>
+                <td>
+                    <a href="/dashboard/edit_ticket/{{ ticket.id }}" class="edit-link">
+                        <img src="/static/images/edit_icon.png" alt="Edit Icon">
+                    </a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
