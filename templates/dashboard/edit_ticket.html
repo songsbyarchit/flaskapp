@@ -22,6 +22,7 @@
         <label for="fullName">Full Name</label>
         <input type="text" id="fullName" name="fullName" value="{{ ticket.full_name }}" required>
         <br>
+        <br>
 
         <!-- Department -->
         <label for="department">Department:</label>
@@ -34,31 +35,23 @@
             <option value="other">Other</option>
         </select>
         <br>
+        <br>
 
         <!-- Theater -->
         <label for="theater">Theater:</label>
         <select id="theater" name="theater" required>
-            <option value="emea">EMEA</option>
-            <option value="apjc">APJC</option>
-            <option value="na">NA</option>
+            <option value="emea" {% if ticket.theater=='emea' %} selected {% endif %}>EMEA</option>
+            <option value="apjc" {% if ticket.theater=='apjc' %} selected {% endif %}>APJC</option>
+            <option value="na" {% if ticket.theater=='na' %} selected {% endif %}>NA</option>
         </select>
         <br>
-
-        <!-- Country -->
-        <!-- Country -->
-        <select id="country" name="country" required>
-            {% for option in countries %}
-            <option value="{{ option.value }}" {% if option.value==ticket.country %} selected {% endif %}>
-                {{ option.label }}
-            </option>
-            {% endfor %}
-        </select>
         <br>
 
         <script>
             function updateCountries() {
                 var theater = document.getElementById("theater").value;
                 var countryDropdown = document.getElementById("country");
+                var originalCountry = "{{ ticket.country }}"; // Assuming ticket.country holds the original country value
                 countryDropdown.disabled = false;
                 countryDropdown.innerHTML = "";
 
@@ -158,6 +151,12 @@
                     naCountries.forEach(country => {
                         addOption(countryDropdown, country.value, country.label);
                     });
+                } var options = countryDropdown.options;
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].value === originalCountry) {
+                        options[i].selected = true;
+                        break;
+                    }
                 }
             }
 
@@ -169,15 +168,26 @@
             }
         </script>
 
-
+        <!-- Country -->
+        <select id="country" name="country" required>
+            {% for option in countries %}
+            <option value="{{ option.value }}" {% if option.value==ticket.country %} selected {% endif %}>
+                {{ option.label }}
+            </option>
+            {% endfor %}
+        </select>
+        <br>
+        <br>
         <!-- Phone Number -->
         <label for="phoneNumber">The best phone number to reach me is:</label>
         <input type="text" id="phoneNumber" name="phoneNumber" value="{{ ticket.phone_number }}" required>
+        <br>
         <br>
 
         <!-- Email -->
         <label for="email">The best email address to reach me is:</label>
         <input type="text" id="email" name="email" value="{{ ticket.email }}" required>
+        <br>
         <br>
 
         <!-- Best Method -->
@@ -187,6 +197,7 @@
             <option value="textMessage">Text Message</option>
             <option value="email">Email</option>
         </select>
+        <br>
         <br>
 
         <!-- Severity -->
@@ -198,6 +209,7 @@
             <option value="4">4 - Business Critical Issue</option>
             <option value="5">5 - Mission Critical Issue</option>
         </select>
+        <br>
         <br>
 
         <!-- Technology -->
@@ -220,6 +232,7 @@
             <option value="workday">Workday</option>
             <option value="other">Other</option>
         </select>
+        <br>
         <br>
 
         <!-- Description -->

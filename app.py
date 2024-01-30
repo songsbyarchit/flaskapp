@@ -352,6 +352,10 @@ def edit_ticket(ticket_id):
         ticket.technology = request.form['technology']
         ticket.description = request.form['description']
 
+        # Print or flash the country value for debugging
+        print(f"Country value in POST request: {ticket.country}")
+        flash(f"Country value in POST request: {ticket.country}", 'info')
+
         # Commit the changes to the database
         db.session.commit()
 
