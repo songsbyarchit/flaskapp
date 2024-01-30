@@ -1,0 +1,29 @@
+<!-- timeout.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Timeout</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'menu2.html' %}
+
+    <br>
+    <h1>Session Timeout</h1>
+    <br>
+    <p>Your session has timed out due to inactivity.</p>
+    <p>Please log in again to continue.</p>
+    <a href="{{ url_for('login') }}" class="textlink">Login</a>
+</body>
+
+</html>

@@ -23,7 +23,7 @@ body {
 }
 
 .menu2 {
-    max-width: 660px;
+    max-width: 680px;
 }
 
 .menu a,
@@ -45,15 +45,14 @@ body {
 }
 
 a,
-.btn-link:not(.logout-button),
+.btn-link,
 button {
     color: #f5b92e;
     /* Yellow color hex code */
 }
 
 a:hover,
-.btn-link:not(.logout-button):hover,
-.logout-button:hover,
+.btn-link:hover,
 button:hover {
     color: #f5b92e;
     /* Restored to original color */
@@ -67,7 +66,7 @@ h1,
     font-weight: bolder;
 }
 
-.logout-button {
+.submitbutton {
     color: white;
     font-weight: bold;
     background-color: #cc2e3e;
@@ -78,19 +77,6 @@ h1,
     /* Adjust this value as needed */
 }
 
-.logout-button:hover {
-    background-color: #1d1b1f;
-    color: #f5b92e;
-    text-decoration: none;
-}
-
-/* Optional: Add custom styles for FAQs */
-.faq-item,
-.faq-item p {
-    font-weight: bolder;
-}
-
-button,
 textarea,
 select,
 input {
@@ -103,12 +89,33 @@ input {
     background-color: lightgray;
 }
 
-button:hover,
 textarea:hover,
 select:hover,
 input:hover {
     background-color: lightslategray;
     color: white;
+}
+
+button {
+    background-color: #851234;
+    margin-top: 6px;
+    margin-left: 8px;
+    padding-right: 26px;
+    padding-left: 26px;
+    padding-top: 6px;
+    padding-bottom: 3px;
+    border-radius: 16px;
+    font-weight: bolder;
+    border-color: white;
+    border-width: 3px;
+    color: white;
+}
+
+button:hover {
+    background-color: #cc2e3e;
+    border-color: lightgray;
+    color: lightgray;
+
 }
 
 textarea {
@@ -117,18 +124,17 @@ textarea {
 }
 
 .textlink {
-    font-weight: bolder;
+    font-weight: normal;
 }
 
 .btn.btn-link:hover,
 .textlink:hover {
     background-color: transparent !important;
-    font-weight: normal;
+    font-weight: bolder;
 }
 
 /* Add this CSS to style the login and register buttons */
-.login-btn,
-.register-btn {
+.yellow-button {
     color: #561331;
     /* Text color */
     background-color: #f5b92e;
@@ -145,8 +151,7 @@ textarea {
     transition: background-color 0.3s, color 0.3s;
 }
 
-.login-btn:hover,
-.register-btn:hover {
+.yellow-button:hover {
     background-color: #851234;
     /* Hover background color */
     color: #f5b92e;

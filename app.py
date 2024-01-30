@@ -8,13 +8,36 @@ from datetime import datetime, timedelta
 import logging
 from markupsafe import escape
 import atexit
+import pytz
 
 app = Flask(__name__)
 login_manager = LoginManager(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SECRET_KEY'] = 'your_secret_key'
 db = SQLAlchemy(app)
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(seconds=5)
+
+@app.before_request
+def before_request():
+    last_activity = session.get('last_activity')
+
+    if last_activity is not None:
+        # Convert datetime.utcnow() to a timezone-aware datetime object
+        utc_now = datetime.now(pytz.utc)
+
+        if last_activity < (utc_now - app.permanent_session_lifetime):
+            # Session has timed out due to inactivity
+            session.clear()
+            flash('Your session has timed out due to inactivity. Please log in again.', 'info')
+            return redirect(url_for('login'))
+
+    # Update the last activity time for the current session
+    session['last_activity'] = datetime.utcnow()
+
+# Route for the custom timeout page
+@app.route('/timeout')
+def timeout_page():
+    return render_template('timeout.html')  # Render your custom timeout page template
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -119,20 +142,6 @@ def is_strong_password(password):
 
 def is_strong_username(username):
     return len(username) >= 8
-
-@app.before_request
-def before_request():
-    print("Before request")
-    print(f"load_user called with user_id: {current_user.get_id()}")
-    print(f"Session data: {session}")
-
-@app.route('/debug_session')
-def debug_session():
-    return str(session)
-
-@app.route('/debug_session_contents')
-def debug_session_contents():
-    return str(session.items())
 
 @app.route('/dashboard/ticket_created')
 def ticket_created():
