@@ -20,10 +20,12 @@
     {% include 'menu2.html' %}
 
     <br>
-    <h1>Edit Confirmation</h1>
+    <h1>Successfully Updated!</h1>
     <br>
-    <p>Your ticket has been updated successfully!</p>
-    <a href="{{ url_for('view_tickets') }}" class="textlink">Back to Tickets</a>
+    Your ticket has been updated successfully!<br><br> Want to see your tickets? <a href="{{ url_for('view_tickets') }}"
+        class="textlink">View existing tickets here</a>
+    <br><br>
+    Have another issue? <a href="{{ url_for('create_ticket') }}" class="textlink">Create another ticket here</a>
 </body>
 
 </html>

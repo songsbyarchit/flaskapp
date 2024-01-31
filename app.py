@@ -11,11 +11,18 @@ import atexit
 import pytz
 
 app = Flask(__name__)
-login_manager = LoginManager(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+login_manager = LoginManager(app)
 app.config['SECRET_KEY'] = 'your_secret_key'
 db = SQLAlchemy(app)
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(seconds=5)
+
+logging.basicConfig(level=logging.DEBUG)
+
+# Add Flask-Migrate configuration
+migrate = Migrate(app, db)
+
+# Set session lifetime to 5 seconds for testing
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
 
 @app.before_request
 def before_request():
@@ -29,7 +36,7 @@ def before_request():
             # Session has timed out due to inactivity
             session.clear()
             flash('Your session has timed out due to inactivity. Please log in again.', 'info')
-            return redirect(url_for('login'))
+            return redirect(url_for('timeout_page'))
 
     # Update the last activity time for the current session
     session['last_activity'] = datetime.utcnow()
@@ -38,11 +45,6 @@ def before_request():
 @app.route('/timeout')
 def timeout_page():
     return render_template('timeout.html')  # Render your custom timeout page template
-
-logging.basicConfig(level=logging.DEBUG)
-
-# Add Flask-Migrate configuration
-migrate = Migrate(app, db)
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -76,11 +78,11 @@ class Ticket(db.Model):
     severity = db.Column(db.Integer, nullable=False)
     technology = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return f"Ticket('{self.username}', '{self.technology}', '{self.created_at}')"
+        return f"Ticket('{self.username}', '{self.technology}', '{self.updated_at}')"
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -123,8 +125,7 @@ def load_user(user_id):
         return user
     return None
 
-# Create the database and tables
-# db.create_all()
+#db.create_all()
 
 def camel_to_title_case(s):
     return ''.join([' ' + c.lower() if c.isupper() else c for c in s]).strip().title()
@@ -321,7 +322,7 @@ def create_ticket():
 @login_required
 def view_tickets():
     # Retrieve the user's tickets, ordered by creation date (most recent first)
-    user_tickets = Ticket.query.filter_by(user=current_user).order_by(Ticket.created_at.desc()).all()
+    user_tickets = Ticket.query.filter_by(user=current_user).order_by(Ticket.updated_at.desc()).all()
     return render_template('dashboard/view_tickets.html', user_tickets=user_tickets)
 
 @app.route("/dashboard/overview")
@@ -365,6 +366,9 @@ def edit_ticket(ticket_id):
         print(f"Country value in POST request: {ticket.country}")
         flash(f"Country value in POST request: {ticket.country}", 'info')
 
+        # Update the 'updated_at' timestamp
+        ticket.updated_at = datetime.utcnow()
+
         # Commit the changes to the database
         db.session.commit()
 
@@ -385,4 +389,4 @@ def contact():
 
 # Run the app locally on localhost
 if __name__ == "__main__":
-    app.run(debug=True, port=8080)  # Set debug to True for development purposes
+    app.run(debug=True, port=8080)
