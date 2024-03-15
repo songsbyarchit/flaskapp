@@ -133,12 +133,17 @@ textarea {
     font-weight: bolder;
 }
 
+.delete_icon {
+    width: 20px;
+    /* Adjust the width to your preference */
+    height: auto;
+    /* Maintain aspect ratio */
+}
+
 /* Add this CSS to style the login and register buttons */
 .yellow-button {
     color: #561331;
-    /* Text color */
     background-color: #f5b92e;
-    /* Background color */
     border-width: 2px;
     border-color: #851234;
     padding: 14px 16px;
@@ -148,7 +153,7 @@ textarea {
     font-weight: bolder;
     cursor: pointer;
     border-radius: 20px;
-    transition: background-color 0.3s, color 0.3s;
+    transition: 0.3s, color 0.3s;
 }
 
 .yellow-button:hover {
@@ -160,19 +165,18 @@ textarea {
     /* Hover text color */
 }
 
-
 select,
 input {
     width: 250px;
     height: 40px;
 }
 
-.edit-link img {
+.edit-delete-link img {
     width: 30px;
     height: auto;
 }
 
-.edit-link img:hover {
+.edit-delete-link img:hover {
     background-color: #cc2e3e;
     border-radius: 2px;
     border: 2px

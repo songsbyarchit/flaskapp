@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="static/styles.css">
     <style>
         /* Custom CSS for thicker table lines */
+        table.table {
+            width: 100%;
+            /* Adjust the width as needed */
+        }
+
         table.table th,
         table.table td {
             border: 2px solid #cc2e3e;
@@ -42,6 +47,7 @@
                 <th>Severity</th>
                 <th>Technology</th>
                 <th>Description</th>
+                <th>Status</th> <!-- New column for status -->
                 <th>Date Updated</th>
                 <th>Time Updated</th>
                 <th>Edit</th> <!-- New column for edit action -->
@@ -60,10 +66,11 @@
                 <td>{{ ticket.severity }}</td>
                 <td>{{ ticket.technology|camel_to_title_case }}</td>
                 <td>{{ ticket.description }}</td>
+                <td>{{ ticket.status|upper }}</td> <!-- Display the status -->
                 <td>{{ ticket.updated_at.strftime('%d-%m-%Y %H:%M:%S')[0:10] }}</td>
                 <td>{{ ticket.updated_at.strftime('%Y-%m-%d %H:%M:%S')[11:19] }}</td>
                 <td>
-                    <a href="/dashboard/edit_ticket/{{ ticket.id }}" class="edit-link">
+                    <a href="/dashboard/edit_ticket/{{ ticket.id }}" class="edit-delete-link">
                         <img src="/static/images/edit_icon.png" alt="Edit Icon">
                     </a>
                 </td>
@@ -71,8 +78,9 @@
             {% endfor %}
         </tbody>
     </table>
+    <p>Have another issue? <a href="{{ url_for('create_ticket') }}" class="textlink">Create a new ticket here</a>.</p>
     {% else %}
-    <p>You have no tickets created. <a href="{{ url_for('create_ticket') }}">Create one here</a>.</p>
+    <p>You have no tickets created. <a href="{{ url_for('create_ticket') }}" class="textlink">Create one here</a>.</p>
     {% endif %}
 
     <!-- Optional: Add Bootstrap JS and jQuery for menu functionality -->

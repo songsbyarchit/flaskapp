@@ -3,6 +3,7 @@ from flask_login import current_user, login_required, LoginManager, UserMixin, l
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy.exc import IntegrityError
+from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
 import logging
@@ -21,7 +22,7 @@ logging.basicConfig(level=logging.DEBUG)
 # Add Flask-Migrate configuration
 migrate = Migrate(app, db)
 
-# Set session lifetime to 5 seconds for testing
+# Set session lifetime to 10 minutes (auto-logout in case of inactivity)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
 
 @app.before_request
@@ -51,6 +52,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)  # New field for admin status
     tickets = db.relationship('Ticket', backref='user', lazy=True)
 
     def set_password(self, password):
@@ -67,7 +69,7 @@ class User(db.Model, UserMixin):
 
 class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    full_name = db.Column(db.String(50), nullable=False)  # Add this line
+    full_name = db.Column(db.String(50), nullable=False)
     username = db.Column(db.String(50), nullable=False)
     department = db.Column(db.String(50), nullable=False)
     theater = db.Column(db.String(50), nullable=False)
@@ -78,6 +80,7 @@ class Ticket(db.Model):
     severity = db.Column(db.Integer, nullable=False)
     technology = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(20), default='unassigned')  # New field for status
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
@@ -112,6 +115,8 @@ class Ticket(db.Model):
 # Create the application context
 app.app_context().push()
 
+db.create_all()
+
 @atexit.register
 def shutdown_session():
     session.clear()  # Clear session data on server shutdown
@@ -125,7 +130,15 @@ def load_user(user_id):
         return user
     return None
 
-#db.create_all()
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user.is_authenticated and current_user.is_admin:
+            return f(*args, **kwargs)
+        else:
+            flash("You do not have permission to access this page.", 'error')
+            return redirect(url_for('home'))
+    return decorated_function
 
 def camel_to_title_case(s):
     return ''.join([' ' + c.lower() if c.isupper() else c for c in s]).strip().title()
@@ -143,6 +156,13 @@ def is_strong_password(password):
 
 def is_strong_username(username):
     return len(username) >= 8
+
+# Route for admin-only page
+@app.route("/admin/admin_dashboard")
+@login_required
+@admin_required
+def admin_dashboard():
+    return render_template('admin/admin_dashboard.html')
 
 @app.route('/dashboard/ticket_created')
 def ticket_created():
@@ -266,9 +286,13 @@ def login():
             session['user_id'] = user.id  # Store user information in the session
             login_user(user)  # Explicitly log in the user
             flash("Login successful!", 'success')
-            print(f"Username: {username}")
-            print(f"User: {user}")
-            print(f"Setting session['user_id']: {user.id}")
+
+            # Check if the user is an admin
+            if user.is_admin:
+                # Redirect to admin dashboard or admin-specific page
+                return redirect(url_for('admin_dashboard'))  # Example route for admin dashboard
+
+            # Redirect to the user-specific page
             return redirect(url_for('login_confirmation', username=username))
 
         # Authentication failed
@@ -318,12 +342,20 @@ def create_ticket():
 
     return render_template('dashboard/create_ticket.html')
 
+@app.route("/admin/admin_view_tickets")
+@login_required
+@admin_required  # Ensure only admin can access this route
+def admin_view_tickets():
+    # Retrieve all tickets from the database, ordered by creation date (most recent first)
+    all_tickets = Ticket.query.order_by(Ticket.updated_at.desc()).all()
+    return render_template('admin/admin_view_tickets.html', all_tickets=all_tickets)
+
 @app.route("/dashboard/view_tickets")
 @login_required
 def view_tickets():
-    # Retrieve the user's tickets, ordered by creation date (most recent first)
-    user_tickets = Ticket.query.filter_by(user=current_user).order_by(Ticket.updated_at.desc()).all()
-    return render_template('dashboard/view_tickets.html', user_tickets=user_tickets)
+    # Retrieve the user's tickets, excluding those with the status "deleted"
+    user_tickets = Ticket.query.filter_by(user=current_user).filter(Ticket.status != 'deleted').order_by(Ticket.updated_at.desc()).all()
+    return render_template('dashboard/view_tickets.html', user_tickets=user_tickets)    
 
 @app.route("/dashboard/overview")
 @login_required

@@ -1,0 +1,41 @@
+<!-- templates/admin_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles.css">
+    <style>
+        /* Custom CSS for thicker table lines */
+        table.table th,
+        table.table td {
+            border: 2px solid #cc2e3e;
+            border-radius: 30px;
+            color: #ddd;
+            font-size: small;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'menu2.html' %}
+
+    <br>
+    <h1>Admin Dashboard</h1>
+    <br>
+    <!-- Link to navigate to admin view tickets page -->
+    <p>Ready to work through some end user tickets?<a href="/admin/admin_view_tickets" class="textlink"> Click here</a>.
+    </p>
+    <p>Want to submit a ticket of your own?<a href="/dashboard/create_ticket" class="textlink"> Click here</a>.</p>
+    <!-- Your admin dashboard content goes here -->
+
+    <!-- Optional: Add Bootstrap JS and jQuery for menu functionality -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -166,6 +166,17 @@
                 option.text = text;
                 selectElement.add(option);
             }
+
+            // Call the function to populate the country dropdown based on the initially selected theater
+            document.addEventListener('DOMContentLoaded', function () {
+                updateCountries(); // This line triggers the function on page load
+
+                var theaterSelect = document.getElementById('theater');
+
+                theaterSelect.addEventListener('change', function () {
+                    updateCountries(); // This line triggers the function when theater selection changes
+                });
+            });
         </script>
 
         <!-- Country -->

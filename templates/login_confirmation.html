@@ -24,6 +24,9 @@
     <h1>Login Successful</h1>
     <br>
     <p>Welcome back, {{ current_user.username }}!</p>
+    {% if current_user.is_admin %}
+    <p>You have logged in as an admin.</p>
+    {% endif %}
     <a href="{{ url_for('view_tickets') }}" class="textlink">View your tickets</a>
     {% else %}
     <p>You are not logged in.</p>
