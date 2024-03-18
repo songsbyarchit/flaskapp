@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Ticket Deleted</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: lightgray;
+            margin: 5px;
+            padding: 5px;
+            background-color: #1d1b1f;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        h1 {
+            font-weight: bolder;
+            color: #f5b92e;
+            text-align: center;
+        }
+
+        ul {
+            color: lightgray;
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            color: #f5b92e;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #f5b92e;
+            text-decoration: none;
+            font-weight: bolder;
+        }
+
+        body {
+            text-align: center;
+        }
+
+
+        ul {
+            text-align: center;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 2px solid #cc2e3e;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Ticket Deleted</h1>
+    <br>
+    <p>The following ticket has been successfully deleted:</p>
+    <ul>
+        <li>Ticket ID: {{ ticket.id }}</li>
+        <li>User: {{ ticket.user.username }}</li>
+        <li>Department: {{ ticket.department }}</li>
+        <li>Theater: {{ ticket.theater }}</li>
+        <li>Country: {{ ticket.country }}</li>
+        <li>Phone Number: {{ ticket.phone_number }}</li>
+        <li>Email: {{ ticket.email }}</li>
+        <li>Best Method: {{ ticket.best_method }}</li>
+        <li>Severity: {{ ticket.severity }}</li>
+        <li>Technology: {{ ticket.technology }}</li>
+        <li>Description: {{ ticket.description }}</li>
+        <li>Date Updated: {{ ticket.updated_at.strftime('%d-%m-%Y') }}</li>
+        <li>Time Updated: {{ ticket.updated_at.strftime('%H:%M:%S') }}</li>
+    </ul>
+    <br>
+    <p><a href="/admin/admin_view_tickets">Back to View Tickets</a></p>
+</body>
+
+</html>

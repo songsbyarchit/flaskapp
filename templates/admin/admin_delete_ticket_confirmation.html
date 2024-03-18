@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Confirmation - Delete Ticket</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: lightgray;
+            margin: 5px;
+            padding: 5px;
+            background-color: #1d1b1f;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        h2 {
+            font-weight: bolder;
+            color: #f5b92e;
+            text-align: center;
+        }
+
+        .confirmation-container {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+        }
+
+        p {
+            color: lightgray;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .btn-container {
+            text-align: center;
+        }
+
+        button {
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            background-color: #cc2e3e;
+            margin-top: 4px;
+            margin-left: 12px;
+            margin-bottom: 20px;
+            padding: 6px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        button.cancel-btn {
+            background-color: #ccc;
+            text-align: center;
+        }
+
+        button:hover {
+            background-color: #851234;
+            border-color: #f5b92e;
+        }
+
+        a {
+            color: #f5b92e;
+            text-align: center;
+            text-decoration: none;
+            border: 2px solid;
+            border-color: white;
+            border-radius: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        a:hover {
+            color: #f5b92e;
+            text-align: center;
+            font-weight: bolder;
+            text-decoration: none;
+            border: 6px solid;
+        }
+    </style>
+</head>
+
+<div class="confirmation-container">
+
+    <body>
+        <h2>Final Confirmation - Delete Ticket?</h2>
+        <p>Are you really sure you want to delete this ticket?!</p><br>
+        <a href="/admin/admin_view_tickets" class="cancel-btn">Cancel</a><br><br>
+        <div class="btn-container">
+            <form action="/admin/delete_ticket/{{ ticket.id }}" method="post">
+                <button type="submit">Confirm</button>
+            </form>
+        </div>
+    </body>
+</div>
+
+</html>

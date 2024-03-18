@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="static/styles.css">
     <style>
         /* Custom CSS for thicker table lines */
+        table.table {
+            width: 100%;
+            /* Adjust the width as needed */
+        }
+
         table.table th,
         table.table td {
             border: 2px solid #cc2e3e;
@@ -43,6 +48,7 @@
                 <th>Severity</th>
                 <th>Technology</th>
                 <th>Description</th>
+                <th>Status</th>
                 <th>Date Updated</th>
                 <th>Time Updated</th>
                 <th>Edit</th> <!-- New column for edit action -->
@@ -63,6 +69,7 @@
                 <td>{{ ticket.severity }}</td>
                 <td>{{ ticket.technology|camel_to_title_case }}</td>
                 <td>{{ ticket.description }}</td>
+                <td>{{ ticket.status|upper }}</td>
                 <td>{{ ticket.updated_at.strftime('%d-%m-%Y %H:%M:%S')[0:10] }}</td>
                 <td>{{ ticket.updated_at.strftime('%Y-%m-%d %H:%M:%S')[11:19] }}</td>
                 <td>

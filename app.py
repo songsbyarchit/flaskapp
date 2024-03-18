@@ -157,13 +157,6 @@ def is_strong_password(password):
 def is_strong_username(username):
     return len(username) >= 8
 
-# Route for admin-only page
-@app.route("/admin/admin_dashboard")
-@login_required
-@admin_required
-def admin_dashboard():
-    return render_template('admin/admin_dashboard.html')
-
 @app.route('/dashboard/ticket_created')
 def ticket_created():
     return render_template('dashboard/ticket_created.html')
@@ -342,6 +335,13 @@ def create_ticket():
 
     return render_template('dashboard/create_ticket.html')
 
+# Route for admin-only page
+@app.route("/admin/admin_dashboard")
+@login_required
+@admin_required
+def admin_dashboard():
+    return render_template('admin/admin_dashboard.html')
+
 @app.route("/admin/admin_view_tickets")
 @login_required
 @admin_required  # Ensure only admin can access this route
@@ -349,6 +349,35 @@ def admin_view_tickets():
     # Retrieve all tickets from the database, ordered by creation date (most recent first)
     all_tickets = Ticket.query.order_by(Ticket.updated_at.desc()).all()
     return render_template('admin/admin_view_tickets.html', all_tickets=all_tickets)
+
+@app.route("/admin/delete_ticket/<int:ticket_id>", methods=["POST"])
+def delete_ticket(ticket_id):
+    # Retrieve the ticket from the database
+    ticket = Ticket.query.get_or_404(ticket_id)
+
+    # Update the status of the ticket to "deleted"
+    ticket.status = "deleted"
+    
+    # Commit the changes to the database
+    db.session.commit()
+    
+    # Redirect to the confirmation page
+    return redirect(url_for("admin_ticket_deleted", ticket_id=ticket.id))
+
+@app.route("/admin/delete_ticket/<int:ticket_id>", methods=["GET"])
+def confirm_delete_ticket(ticket_id):
+    # Retrieve the ticket from the database
+    ticket = Ticket.query.get_or_404(ticket_id)
+    
+    # Render the confirmation page
+    return render_template("admin/admin_delete_ticket_confirmation.html", ticket=ticket)
+
+@app.route("/admin/ticket_deleted/<int:ticket_id>")
+def admin_ticket_deleted(ticket_id):
+    # Fetch ticket details from the database using ticket_id
+    ticket = Ticket.query.get_or_404(ticket_id)
+    # Render the template for ticket deletion confirmation
+    return render_template("admin/admin_ticket_deleted.html", ticket=ticket)
 
 @app.route("/dashboard/view_tickets")
 @login_required
