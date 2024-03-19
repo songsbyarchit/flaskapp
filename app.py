@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
 from flask_login import current_user, login_required, LoginManager, UserMixin, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from flask_migrate import Migrate
 from sqlalchemy.exc import IntegrityError
 from functools import wraps
@@ -157,6 +158,74 @@ def is_strong_password(password):
 def is_strong_username(username):
     return len(username) >= 8
 
+
+@app.route("/admin/admin_login_confirmation")
+def admin_login_confirmation():
+    return render_template("admin/admin_login_confirmation.html")
+
+# Route for admin-only page
+@app.route("/admin/admin_dashboard")
+@login_required
+@admin_required
+def admin_dashboard():
+    # Query the database to get the ticket counts
+    total_unassigned_tickets_count = Ticket.query.filter_by(status='unassigned').count()
+    total_assigned_tickets_count = Ticket.query.filter_by(status='assigned').count()
+    total_resolved_tickets_count = Ticket.query.filter_by(status='resolved').count()
+    total_deleted_tickets_count = Ticket.query.filter_by(status='deleted').count()
+
+    # Assuming 'updated_at' is a datetime field in your Ticket model
+    total_last_week_tickets_count = Ticket.query.filter(Ticket.updated_at >= datetime.now() - timedelta(days=7)).count()
+    total_this_month_tickets_count = Ticket.query.filter(Ticket.updated_at >= datetime.now() - timedelta(days=30)).count()
+    total_this_year_tickets_count = Ticket.query.filter(Ticket.updated_at >= datetime.now() - timedelta(days=365)).count()
+
+    # Pass these counts as context variables to the template
+    return render_template('admin/admin_dashboard.html', 
+                           total_unassigned_tickets_count=total_unassigned_tickets_count,
+                           total_assigned_tickets_count=total_assigned_tickets_count,
+                           total_resolved_tickets_count=total_resolved_tickets_count,
+                           total_deleted_tickets_count=total_deleted_tickets_count,
+                           total_last_week_tickets_count=total_last_week_tickets_count,
+                           total_this_month_tickets_count=total_this_month_tickets_count,
+                           total_this_year_tickets_count=total_this_year_tickets_count)
+
+@app.route("/admin/admin_view_tickets")
+@login_required
+@admin_required  # Ensure only admin can access this route
+def admin_view_tickets():
+    # Retrieve all tickets from the database, ordered by creation date (most recent first)
+    all_tickets = Ticket.query.order_by(Ticket.updated_at.desc()).all()
+    return render_template('admin/admin_view_tickets.html', all_tickets=all_tickets)
+
+@app.route("/admin/delete_ticket/<int:ticket_id>", methods=["POST"])
+def delete_ticket(ticket_id):
+    # Retrieve the ticket from the database
+    ticket = Ticket.query.get_or_404(ticket_id)
+
+    # Update the status of the ticket to "deleted"
+    ticket.status = "deleted"
+    
+    # Commit the changes to the database
+    db.session.commit()
+    
+    # Redirect to the confirmation page
+    return redirect(url_for("admin_ticket_deleted", ticket_id=ticket.id))
+
+@app.route("/admin/delete_ticket/<int:ticket_id>", methods=["GET"])
+def confirm_delete_ticket(ticket_id):
+    # Retrieve the ticket from the database
+    ticket = Ticket.query.get_or_404(ticket_id)
+    
+    # Render the confirmation page
+    return render_template("admin/admin_delete_ticket_confirmation.html", ticket=ticket)
+
+@app.route("/admin/ticket_deleted/<int:ticket_id>")
+def admin_ticket_deleted(ticket_id):
+    # Fetch ticket details from the database using ticket_id
+    ticket = Ticket.query.get_or_404(ticket_id)
+    # Render the template for ticket deletion confirmation
+    return render_template("admin/admin_ticket_deleted.html", ticket=ticket)
+
 @app.route('/dashboard/ticket_created')
 def ticket_created():
     return render_template('dashboard/ticket_created.html')
@@ -264,6 +333,8 @@ def logout():
 def logout_page():
     return render_template("logout_page.html")
 
+from flask import redirect
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -282,8 +353,8 @@ def login():
 
             # Check if the user is an admin
             if user.is_admin:
-                # Redirect to admin dashboard or admin-specific page
-                return redirect(url_for('admin_dashboard'))  # Example route for admin dashboard
+                # Redirect to admin login confirmation page
+                return redirect(url_for('admin_login_confirmation'))  # Route for admin login confirmation page
 
             # Redirect to the user-specific page
             return redirect(url_for('login_confirmation', username=username))
@@ -335,50 +406,6 @@ def create_ticket():
 
     return render_template('dashboard/create_ticket.html')
 
-# Route for admin-only page
-@app.route("/admin/admin_dashboard")
-@login_required
-@admin_required
-def admin_dashboard():
-    return render_template('admin/admin_dashboard.html')
-
-@app.route("/admin/admin_view_tickets")
-@login_required
-@admin_required  # Ensure only admin can access this route
-def admin_view_tickets():
-    # Retrieve all tickets from the database, ordered by creation date (most recent first)
-    all_tickets = Ticket.query.order_by(Ticket.updated_at.desc()).all()
-    return render_template('admin/admin_view_tickets.html', all_tickets=all_tickets)
-
-@app.route("/admin/delete_ticket/<int:ticket_id>", methods=["POST"])
-def delete_ticket(ticket_id):
-    # Retrieve the ticket from the database
-    ticket = Ticket.query.get_or_404(ticket_id)
-
-    # Update the status of the ticket to "deleted"
-    ticket.status = "deleted"
-    
-    # Commit the changes to the database
-    db.session.commit()
-    
-    # Redirect to the confirmation page
-    return redirect(url_for("admin_ticket_deleted", ticket_id=ticket.id))
-
-@app.route("/admin/delete_ticket/<int:ticket_id>", methods=["GET"])
-def confirm_delete_ticket(ticket_id):
-    # Retrieve the ticket from the database
-    ticket = Ticket.query.get_or_404(ticket_id)
-    
-    # Render the confirmation page
-    return render_template("admin/admin_delete_ticket_confirmation.html", ticket=ticket)
-
-@app.route("/admin/ticket_deleted/<int:ticket_id>")
-def admin_ticket_deleted(ticket_id):
-    # Fetch ticket details from the database using ticket_id
-    ticket = Ticket.query.get_or_404(ticket_id)
-    # Render the template for ticket deletion confirmation
-    return render_template("admin/admin_ticket_deleted.html", ticket=ticket)
-
 @app.route("/dashboard/view_tickets")
 @login_required
 def view_tickets():
@@ -389,7 +416,37 @@ def view_tickets():
 @app.route("/dashboard/overview")
 @login_required
 def overview():
-    return render_template('dashboard/overview.html')  # Pass username and ticket data to the template
+    # Query ticket statistics for the current user
+    unassigned_tickets_count = Ticket.query.filter_by(user_id=current_user.id, status='unassigned').count()
+    assigned_tickets_count = Ticket.query.filter_by(user_id=current_user.id, status='assigned').count()
+    resolved_tickets_count = Ticket.query.filter_by(user_id=current_user.id, status='resolved').count()
+    deleted_tickets_count = Ticket.query.filter_by(user_id=current_user.id, status='deleted').count()
+    
+    # Query for tickets updated in the last week, month, and year
+    now = datetime.utcnow()
+    last_week_tickets_count = Ticket.query.filter(
+        Ticket.user_id == current_user.id,
+        Ticket.updated_at >= now - timedelta(weeks=1)
+    ).count()
+    this_month_tickets_count = Ticket.query.filter(
+        Ticket.user_id == current_user.id,
+        Ticket.updated_at >= now - timedelta(days=now.day - 1)
+    ).count()
+    this_year_tickets_count = Ticket.query.filter(
+        Ticket.user_id == current_user.id,
+        Ticket.updated_at >= now.replace(month=1, day=1)
+    ).count()
+
+    return render_template(
+        'dashboard/overview.html',
+        unassigned_tickets_count=unassigned_tickets_count,
+        assigned_tickets_count=assigned_tickets_count,
+        resolved_tickets_count=resolved_tickets_count,
+        deleted_tickets_count=deleted_tickets_count,
+        last_week_tickets_count=last_week_tickets_count,
+        this_month_tickets_count=this_month_tickets_count,
+        this_year_tickets_count=this_year_tickets_count
+    )
 
 @app.route("/faq")
 def faq():

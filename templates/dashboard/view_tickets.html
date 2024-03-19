@@ -27,11 +27,14 @@
 
 <body>
     {% include 'menu2.html' %}
-
+    {% if current_user.is_authenticated and current_user.is_admin %}
+    <p>You are currently in standard user mode. Want to return to admin mode? <a
+            href="{{ url_for('admin_dashboard') }}">Click here</a>.</p>
+    {% endif %}
     <br>
     <h1>View Tickets</h1>
     <br>
-    <p>Hey {{ current_user.username }}, here are all your tickets:</p>
+    <p>Hey <b>{{ current_user.username }}</b>, here are all your tickets:</p>
     <br>
     {% if user_tickets %}
     <table class="table">

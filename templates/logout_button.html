@@ -1,5 +1,13 @@
 <!-- logout_button.html -->
 
-<form method="POST" action="{{ url_for('logout') }}">
-    <button type="submit" class="logout_button">Logout</button>
+<form id="logout-form" method="POST" action="{{ url_for('logout') }}">
+    <button type="button" onclick="confirmLogout()" class="logout_button">Logout</button>
 </form>
+
+<script>
+    function confirmLogout() {
+        if (confirm("Are you sure you want to logout?")) {
+            document.getElementById('logout-form').submit();
+        }
+    }
+</script>

@@ -12,11 +12,28 @@
 
 <body>
     {% include 'menu2.html' %}
+    {% if current_user.is_authenticated and current_user.is_admin %}
+    <p>You are currently in standard user mode. Want to return to admin mode? <a
+            href="{{ url_for('admin_dashboard') }}">Click here</a>.</p>
+    {% endif %}
 
     <br>
     <h1>Edit Ticket</h1>
 
     <form method="POST" action="{{ url_for('edit_ticket', ticket_id=ticket.id) }}">
+        {% if current_user.is_authenticated and current_user.is_admin %}
+        <form method="POST" action="{{ url_for('edit_ticket', ticket_id=ticket.id) }}">
+            <!-- Status field for admins -->
+            <label for="status">Status:</label>
+            <select id="status" name="status" required>
+                <option value="unassigned" {% if ticket.status=='unassigned' %} selected {% endif %}>Unassigned</option>
+                <option value="assigned" {% if ticket.status=='assigned' %} selected {% endif %}>Assigned</option>
+                <option value="resolved" {% if ticket.status=='resolved' %} selected {% endif %}>Resolved</option>
+                <option value="deleted" {% if ticket.status=='deleted' %} selected {% endif %}>Deleted</option>
+            </select>
+            <br>
+        </form>
+        {% endif %}
         <br>
         <!-- Full Name -->
         <label for="fullName">Full Name</label>

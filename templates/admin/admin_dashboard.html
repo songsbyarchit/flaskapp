@@ -27,15 +27,42 @@
     <h1>Admin Dashboard</h1>
     <br>
     <!-- Link to navigate to admin view tickets page -->
-    <p>Ready to work through some end user tickets?<a href="/admin/admin_view_tickets" class="textlink"> Click here</a>.
-    </p>
-    <p>Want to submit a ticket of your own?<a href="/dashboard/create_ticket" class="textlink"> Click here</a>.</p>
+
+    <p>Hey <b>{{ current_user.username }}</b>, here is an overview of the current status of tickets:</p>
+    <div class="overview-box">
+        <p>
+        <h3>In total, there are...</h3>
+        <div class="orange-text">{{ total_unassigned_tickets_count }}</div> unassigned tickets.</p>
+        <p>
+        <div class="orange-text">{{ total_assigned_tickets_count }}</div> assigned tickets.</p>
+        <p>
+        <div class="orange-text">{{ total_resolved_tickets_count }}</div> resolved tickets.</p>
+        <p>
+        <div class="orange-text">{{ total_deleted_tickets_count }} </div> tickets deleted by administrators.
+        </p>
+    </div>
+    <br>
+    <div class="overview-box">
+        <p>
+        <h3>In totals, users have created...</h3>
+        <div class="orange-text">{{ total_last_week_tickets_count }}
+        </div> tickets in the last week.</p>
+        <p>
+        <div class="orange-text">{{ total_this_month_tickets_count }}</div> tickets this month.</p>
+        <p>
+        <div class="orange-text">{{ total_this_year_tickets_count }}</div> tickets this year.</p>
+    </div>
     <!-- Your admin dashboard content goes here -->
 
     <!-- Optional: Add Bootstrap JS and jQuery for menu functionality -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <br>
+    <h3>Ready to assign & resolve some end user tickets?<a href="/admin/admin_view_tickets" class="textlink">
+            Click here</a>.</h3><br>
+    <h3>Want to submit a ticket of your own?<a href="/dashboard/create_ticket" class="textlink"> Click here</a>.</h3>
+    <br>
 </body>
 
 </html>

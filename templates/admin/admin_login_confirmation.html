@@ -1,4 +1,4 @@
-<!-- login_confirmation.html -->
+<!-- admin_login_confirmation.html -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Confirmation</title>
+    <title>Admin Login Confirmation</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/styles.css">
     <style>
@@ -21,13 +21,15 @@
 
     {% if current_user.is_authenticated %}
     <br>
-    <h1>Login Successful</h1>
+    <h1>Admin Login Successful</h1>
     <br>
-    <p>Welcome back, {{ current_user.username }}!</p>
+    <p>Welcome back, <b>{{ current_user.username }}</b>!</p>
     {% if current_user.is_admin %}
-    <p>You have logged in as an admin.</p>
+    <p>You have logged in as an <b>admin.</b></p><br>
+    <p>WARNING: please take precaution with your additional priveleges as admin.</p>
+    <p>Make appropriate checks before editing, and especially before deleting, end-user tickets.</p><br>
     {% endif %}
-    See an <a href="{{ url_for('overview') }}" class="textlink">overview</a> of your tickets.
+    <h3>See an <a href="{{ url_for('overview') }}" class="textlink">overview</a> of your tickets.</h3>
     {% else %}
     <p>You are not logged in.</p>
     {% endif %}

@@ -114,7 +114,6 @@ button {
 
 button:hover {
     background-color: #cc2e3e;
-    border-color: lightgray;
     color: lightgray;
 
 }
@@ -194,4 +193,19 @@ input {
     padding: 20px;
     border: 2px solid #cc2e3e;
     border-radius: 10px;
+}
+
+.overview-box {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 10px;
+    border: 2px solid #cc2e3e;
+    border-radius: 10px;
+}
+
+.orange-text {
+    color: orange;
+    display: inline;
+    font-size: x-large;
 }

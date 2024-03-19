@@ -35,7 +35,10 @@
     {% else %}
     {% include 'menu.html' %}
     {% endif %}
-
+    {% if current_user.is_authenticated and current_user.is_admin %}
+    <p>You are currently in standard user mode. Want to return to admin mode? <a
+            href="{{ url_for('admin_dashboard') }}">Click here</a>.</p>
+    {% endif %}
     <br>
     <h1>Contact Us</h1>
     <br>

@@ -12,11 +12,17 @@
 
 <body>
     {% include 'menu2.html' %}
+    {% if current_user.is_authenticated and current_user.is_admin %}
+    <p>You are currently in standard user mode. Want to return to admin mode? <a
+            href="{{ url_for('admin_dashboard') }}">Click here</a>.</p>
+    {% endif %}
 
     <br>
     <h1>Create Ticket</h1>
 
     <form method="POST" action="{{ url_for('create_ticket') }}" class="create-ticket-form">
+        Please fill in the form below to submit a ticket. Add as much detail as possible, as this will allow our support
+        agents to solve your issue quickly.<br><br>
         <br>
         <label for="fullName">Full Name</label>
         <input type="text" id="fullName" name="fullName" required>
